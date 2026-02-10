@@ -16,6 +16,14 @@
 - **`-Xcc -Wno-incomplete-umbrella`** suppresses GhosttyKit umbrella header warnings
 - **Deployment target: macOS 26.0** (running on macOS Tahoe; SwiftUICore linker issue with older targets)
 
+## Code Signing
+
+- App is signed with Apple Development certificate (team BQYU8UZ8T7)
+- Xcode manages signing automatically
+- Makefile no longer passes `CODE_SIGNING_ALLOWED=NO` — builds are properly signed
+- `UNUserNotificationCenter` requires proper code signing; `osascript` is kept as fallback for unauthorized state
+- GhosttyKit.xcframework contains a **static library** (`libghostty.a`) — must NOT be embedded in the app bundle (only linked). Embedding causes codesign failures.
+
 ## Ghostty Infrastructure
 
 8 files ported from supacode (`/Users/tudoroancea/dev/supacode/supacode/Infrastructure/Ghostty/`):

@@ -36,7 +36,7 @@ $(GHOSTTY_BUILD_OUTPUTS):
 	rsync -a --delete "$$terminfo_src/" "$$terminfo_dst/"
 
 build-app: build-ghostty-xcframework # Build the macOS app (Debug)
-	bash -o pipefail -c 'xcodebuild -project PiDesktop.xcodeproj -scheme PiDesktop -configuration Debug build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" -skipMacroValidation 2>&1 | mise exec -- xcsift -qw --format toon'
+	bash -o pipefail -c 'xcodebuild -project PiDesktop.xcodeproj -scheme PiDesktop -configuration Debug build -skipMacroValidation 2>&1 | mise exec -- xcsift -qw --format toon'
 
 run-app: build-app # Build then launch (Debug) with log streaming
 	@settings="$$(xcodebuild -project PiDesktop.xcodeproj -scheme PiDesktop -configuration Debug -showBuildSettings -json 2>/dev/null)"; \
@@ -51,4 +51,4 @@ check: # Format and lint
 	mise exec -- swiftlint lint --quiet --config .swiftlint.yml
 
 test: build-ghostty-xcframework # Run tests
-	xcodebuild test -project PiDesktop.xcodeproj -scheme PiDesktop -destination "platform=macOS" CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" -skipMacroValidation 2>&1
+	xcodebuild test -project PiDesktop.xcodeproj -scheme PiDesktop -destination "platform=macOS" -skipMacroValidation 2>&1

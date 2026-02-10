@@ -128,7 +128,7 @@ Port these files **verbatim** from supacode, removing only supacode-specific imp
 
 **Validation**: Build a minimal app that shows a single `GhosttyTerminalView` running `zsh`. Verify input, scrolling, clipboard, color scheme sync all work.
 
-### Phase 2: Terminal Tab Management
+### Phase 2: Terminal Tab Management ✅
 
 Create a simplified version of supacode's tab system (no splits, no TCA):
 
@@ -168,7 +168,7 @@ struct TerminalTab: Identifiable {
 
 **Close-on-exit**: Wire `bridge.onCloseRequest` to automatically remove the tab when the shell process exits (pi exits → shell exits → ghostty fires `close_surface`). This is already how supacode handles it via `handleCloseRequest`.
 
-### Phase 3: OSC 777 Notifications
+### Phase 3: OSC 777 Notifications ✅
 
 Already handled by the ported `GhosttySurfaceBridge`. The `GHOSTTY_ACTION_DESKTOP_NOTIFICATION` action fires `onDesktopNotification` callback with title and body.
 

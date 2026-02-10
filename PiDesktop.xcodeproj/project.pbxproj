@@ -17,10 +17,13 @@
 		8F46E86AFAEC71A36F12FBB0 /* GhosttyShortcutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1ED51BAFDE5D4871419B014 /* GhosttyShortcutManager.swift */; };
 		943D0A8E93359FD722744C2F /* ghostty in Resources */ = {isa = PBXBuildFile; fileRef = 730558BDAB14FEBBED35D4C9 /* ghostty */; };
 		A1EACB9583282E4FA60CC075 /* GhosttyKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D62DD9042DB25030452E912 /* GhosttyKit.xcframework */; };
+		BB0001010000000100000001 /* TerminalTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001010000000100000001 /* TerminalTab.swift */; };
+		BB0001010000000100000002 /* TerminalTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001010000000100000002 /* TerminalTabManager.swift */; };
+		BB0001010000000100000003 /* TerminalTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001010000000100000003 /* TerminalTabBarView.swift */; };
+		BB0001010000000100000004 /* TerminalDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001010000000100000004 /* TerminalDetailView.swift */; };
 		BC1EE5B4D1588FF3CEDB8DEB /* GhosttySurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D420DAD2051A9F5053A9B96 /* GhosttySurfaceView.swift */; };
 		CC4EBADB549DFA92B407A6B1 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95EA61D5AC541B7A29465FBB /* Carbon.framework */; };
 		E394CE23DF70A5477738B3DD /* terminfo in Resources */ = {isa = PBXBuildFile; fileRef = 9A6348D0DE49F359B61604E2 /* terminfo */; };
-		F16287C2A5DFFF43F80F4AE3 /* GhosttyKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6D62DD9042DB25030452E912 /* GhosttyKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -30,7 +33,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				F16287C2A5DFFF43F80F4AE3 /* GhosttyKit.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -49,6 +51,10 @@
 		9A6348D0DE49F359B61604E2 /* terminfo */ = {isa = PBXFileReference; lastKnownFileType = folder; path = terminfo; sourceTree = "<group>"; };
 		A1ED51BAFDE5D4871419B014 /* GhosttyShortcutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosttyShortcutManager.swift; sourceTree = "<group>"; };
 		A97C29AD63741CF438998CE6 /* PiDesktop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PiDesktop.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA0001010000000100000001 /* TerminalTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalTab.swift; sourceTree = "<group>"; };
+		AA0001010000000100000002 /* TerminalTabManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalTabManager.swift; sourceTree = "<group>"; };
+		AA0001010000000100000003 /* TerminalTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalTabBarView.swift; sourceTree = "<group>"; };
+		AA0001010000000100000004 /* TerminalDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalDetailView.swift; sourceTree = "<group>"; };
 		D7068A01AADFC8F6055F0125 /* GhosttyRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosttyRuntime.swift; sourceTree = "<group>"; };
 		EF97B0A1B10296473E032F2E /* GhosttySplitAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosttySplitAction.swift; sourceTree = "<group>"; };
 		F03062A7CEDF906A0521C0E3 /* GhosttySurfaceState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosttySurfaceState.swift; sourceTree = "<group>"; };
@@ -91,6 +97,7 @@
 			children = (
 				7B0CF197EFA928EAA5669DCB /* PiDesktopApp.swift */,
 				AEA7ABE7831C6F0DB4BBDF00 /* Infrastructure */,
+				CC0001010000000100000001 /* Features */,
 			);
 			path = PiDesktop;
 			sourceTree = "<group>";
@@ -124,6 +131,25 @@
 				A97C29AD63741CF438998CE6 /* PiDesktop.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		CC0001010000000100000001 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				CC0001010000000100000002 /* Terminal */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		CC0001010000000100000002 /* Terminal */ = {
+			isa = PBXGroup;
+			children = (
+				AA0001010000000100000001 /* TerminalTab.swift */,
+				AA0001010000000100000002 /* TerminalTabManager.swift */,
+				AA0001010000000100000003 /* TerminalTabBarView.swift */,
+				AA0001010000000100000004 /* TerminalDetailView.swift */,
+			);
+			path = Terminal;
 			sourceTree = "<group>";
 		};
 		F46FB683FBA087970B5F7032 /* Resources */ = {
@@ -207,6 +233,10 @@
 				7871DF54EDA1614B5AEBD604 /* GhosttySplitAction.swift in Sources */,
 				8F46E86AFAEC71A36F12FBB0 /* GhosttyShortcutManager.swift in Sources */,
 				7EB91EA108690A8FB50F2785 /* SecureInput.swift in Sources */,
+				BB0001010000000100000001 /* TerminalTab.swift in Sources */,
+				BB0001010000000100000002 /* TerminalTabManager.swift in Sources */,
+				BB0001010000000100000003 /* TerminalTabBarView.swift in Sources */,
+				BB0001010000000100000004 /* TerminalDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,12 +249,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=macosx*]" = BQYU8UZ8T7;
+				DEVELOPMENT_TEAM = BQYU8UZ8T7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Frameworks";
 				GENERATE_INFOPLIST_FILE = YES;
@@ -242,7 +272,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -Xcc -Wno-incomplete-umbrella";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tudoroancea.PiDesktop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -254,12 +284,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=macosx*]" = BQYU8UZ8T7;
+				DEVELOPMENT_TEAM = BQYU8UZ8T7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Frameworks";
 				GENERATE_INFOPLIST_FILE = YES;
@@ -277,7 +307,7 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -Xcc -Wno-incomplete-umbrella";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tudoroancea.PiDesktop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
