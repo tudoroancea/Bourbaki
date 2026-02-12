@@ -1,8 +1,21 @@
 {
   "fill" : {
-    "solid" : "display-p3:0.12157,0.11373,0.18039,1.00000"
+    "solid" : "display-p3:1.00000,0.98039,0.95294,1.00000"
   },
   "groups" : [
+    {
+      "layers" : [
+
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
     {
       "hidden" : false,
       "layers" : [

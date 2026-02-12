@@ -29,6 +29,9 @@ final class TerminalTabManager {
   /// Optional reference to project store for updating session status from in-app tabs.
   var projectStore: ProjectStore?
 
+  /// Optional reference to recent worktree store for recording opens.
+  var recentWorktreeStore: RecentWorktreeStore?
+
   init(runtime: GhosttyRuntime) {
     self.runtime = runtime
     let center = UNUserNotificationCenter.current()
@@ -57,6 +60,9 @@ final class TerminalTabManager {
     let standardized = path.standardizedFileURL
     selectedWorktreePath = path
 
+    // Record in recent worktrees
+    recordRecentWorktree(path: standardized)
+
     // If the current tab is already in this worktree, keep it
     if let selectedTabID, let tab = tabs.first(where: { $0.id == selectedTabID }),
        tab.worktreePath.standardizedFileURL == standardized {
@@ -72,6 +78,25 @@ final class TerminalTabManager {
 
     // No tabs for this worktree — open a pi session by default
     createTab(type: .pi, workingDirectory: path)
+  }
+
+  /// Record a worktree open in the recent store.
+  private func recordRecentWorktree(path: URL) {
+    guard let store = projectStore, let recentStore = recentWorktreeStore else { return }
+    for project in store.projects {
+      if let worktree = project.worktrees.first(where: {
+        $0.path.standardizedFileURL == path
+      }) {
+        recentStore.recordOpen(path: path, projectName: project.name, worktreeName: worktree.name)
+        return
+      }
+      if project.rootPath.standardizedFileURL == path {
+        recentStore.recordOpen(path: path, projectName: project.name, worktreeName: project.name)
+        return
+      }
+    }
+    // Fallback: use the directory name
+    recentStore.recordOpen(path: path, projectName: path.lastPathComponent, worktreeName: path.lastPathComponent)
   }
 
   @discardableResult

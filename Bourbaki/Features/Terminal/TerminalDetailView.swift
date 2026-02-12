@@ -3,6 +3,7 @@ import SwiftUI
 struct TerminalDetailView: View {
   @Bindable var tabManager: TerminalTabManager
   @Bindable var projectStore: ProjectStore
+  @Bindable var recentStore: RecentWorktreeStore
 
   var body: some View {
     VStack(spacing: 0) {
@@ -17,7 +18,9 @@ struct TerminalDetailView: View {
         } else if tabManager.selectedWorktreePath != nil {
           worktreeEmptyState
         } else {
-          noWorktreeState
+          DashboardView(recentStore: recentStore) { url in
+            tabManager.selectWorktree(url)
+          }
         }
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -60,19 +63,7 @@ struct TerminalDetailView: View {
     }
   }
 
-  private var noWorktreeState: some View {
-    VStack(spacing: 12) {
-      Image(systemName: "sidebar.left")
-        .font(.jetBrainsMono(size: 48))
-        .foregroundStyle(RosePine.muted)
-      Text("Select a worktree")
-        .font(.jetBrainsMono(size: 17, weight: .semibold))
-        .foregroundStyle(RosePine.subtle)
-      Text("Choose a project worktree from the sidebar")
-        .font(.jetBrainsMono(size: 14))
-        .foregroundStyle(RosePine.muted)
-    }
-  }
+
 }
 
 // MARK: - Window Title Updater

@@ -49,6 +49,15 @@ All app-level keybindings are defined in `Bourbaki/App/AppShortcuts.swift`. They
 
 Key bindings use `Cmd+Ctrl` and `Cmd+Shift` combos to avoid collisions with both ghostty defaults (`Cmd+T/W/N/1-9`) and pi keybindings (`Ctrl+P/L/C/D`).
 
+## Dashboard / Recent Worktrees
+
+- `DashboardView` shown in detail pane when no worktree is selected (app startup)
+- `RecentWorktreeStore` persists to `~/Library/Application Support/Bourbaki/recent_worktrees.json`
+- Up to 20 recent entries, sorted by last opened
+- `Cmd+1-9` opens recent worktrees from dashboard (reuses tab shortcuts when no worktree active)
+- When a worktree is selected, `Cmd+1-9` reverts to normal tab switching behavior
+- Entries show display name, path, relative time; invalid paths are grayed out with warning icon
+
 ## Theme
 
 - Rosé Pine (dark) + Rosé Pine Dawn (light) — auto-switches via `NSAppearance.isDark`

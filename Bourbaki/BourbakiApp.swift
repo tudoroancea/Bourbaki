@@ -46,6 +46,7 @@ struct BourbakiApp: App {
   @State private var ghostty: GhosttyRuntime
   @State private var tabManager: TerminalTabManager
   @State private var projectStore: ProjectStore
+  @State private var recentStore: RecentWorktreeStore
 
   @MainActor init() {
     NSWindow.allowsAutomaticWindowTabbing = false
@@ -75,6 +76,10 @@ struct BourbakiApp: App {
     _projectStore = State(initialValue: store)
     manager.projectStore = store
 
+    let recent = RecentWorktreeStore()
+    _recentStore = State(initialValue: recent)
+    manager.recentWorktreeStore = recent
+
     // Wire tab manager to app delegate for quit/close confirmation
     appDelegate.tabManager = manager
   }
@@ -82,7 +87,7 @@ struct BourbakiApp: App {
   var body: some Scene {
     Window("Bourbaki", id: "main") {
       GhosttyColorSchemeSyncView(ghostty: ghostty) {
-        MainContentView(tabManager: tabManager, projectStore: projectStore)
+        MainContentView(tabManager: tabManager, projectStore: projectStore, recentStore: recentStore)
       }
     }
     .commands {
@@ -201,7 +206,15 @@ struct BourbakiApp: App {
 
         ForEach(Array(AppShortcuts.tabShortcuts.enumerated()), id: \.offset) { index, shortcut in
           Button("Tab \(index + 1)") {
-            tabManager.selectTabByIndex(index)
+            if tabManager.selectedWorktreePath == nil {
+              // Dashboard mode: open recent worktree by index
+              let entries = recentStore.entries
+              if index < entries.count, let url = recentStore.url(for: entries[index]) {
+                tabManager.selectWorktree(url)
+              }
+            } else {
+              tabManager.selectTabByIndex(index)
+            }
           }
           .keyboardShortcut(shortcut.keyEquivalent, modifiers: shortcut.modifiers)
         }
@@ -241,13 +254,14 @@ enum ExternalAppLauncher {
 private struct MainContentView: View {
   @Bindable var tabManager: TerminalTabManager
   @Bindable var projectStore: ProjectStore
+  @Bindable var recentStore: RecentWorktreeStore
 
   var body: some View {
     NavigationSplitView {
       SidebarView(projectStore: projectStore, tabManager: tabManager)
         .background(RosePine.surface)
     } detail: {
-      TerminalDetailView(tabManager: tabManager, projectStore: projectStore)
+      TerminalDetailView(tabManager: tabManager, projectStore: projectStore, recentStore: recentStore)
     }
     .frame(minWidth: 800, minHeight: 500)
     .rosePineWindow()
