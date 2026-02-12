@@ -7,9 +7,21 @@
       "hidden" : false,
       "layers" : [
         {
+          "image-name" : "Knuth's_dangerous_bend_symbol.svg",
+          "name" : "Knuth's_dangerous_bend_symbol",
+          "position" : {
+            "scale" : 6,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
+        },
+        {
           "fill" : {
             "solid" : "srgb:0.87843,0.87059,0.95686,1.00000"
           },
+          "hidden" : true,
           "image-name" : "Pi-symbol.svg.png",
           "name" : "Pi-symbol.svg",
           "position" : {

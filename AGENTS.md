@@ -1,4 +1,4 @@
-# PiDesktop — Project Knowledge
+# Bourbaki — Project Knowledge
 
 ## Build
 
@@ -45,7 +45,7 @@ Changes from supacode originals:
 
 ## App Keybindings
 
-All app-level keybindings are defined in `PiDesktop/App/AppShortcuts.swift`. They are **unbound from ghostty** at init time via `--keybind=<bind>=unbind` CLI args passed to `ghostty_init` (same pattern as supacode). The ghostty unbind format uses `ctrl`/`alt`/`shift`/`super` modifiers joined by `+`.
+All app-level keybindings are defined in `Bourbaki/App/AppShortcuts.swift`. They are **unbound from ghostty** at init time via `--keybind=<bind>=unbind` CLI args passed to `ghostty_init` (same pattern as supacode). The ghostty unbind format uses `ctrl`/`alt`/`shift`/`super` modifiers joined by `+`.
 
 Key bindings use `Cmd+Ctrl` and `Cmd+Shift` combos to avoid collisions with both ghostty defaults (`Cmd+T/W/N/1-9`) and pi keybindings (`Ctrl+P/L/C/D`).
 

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0BF7673E67776E22E197FEC6 /* GhosttyRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7068A01AADFC8F6055F0125 /* GhosttyRuntime.swift */; };
-		33C5669C33600A453399CD0D /* PiDesktopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B0CF197EFA928EAA5669DCB /* PiDesktopApp.swift */; };
+		33C5669C33600A453399CD0D /* BourbakiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B0CF197EFA928EAA5669DCB /* BourbakiApp.swift */; };
 		391F749CABEE759E033ED326 /* GhosttySurfaceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03062A7CEDF906A0521C0E3 /* GhosttySurfaceState.swift */; };
 		397850A493A2E06CFA3A1A07 /* GhosttySurfaceBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AD92119EC7A515554AC900 /* GhosttySurfaceBridge.swift */; };
 		77C2CFBEC5FFB722154F8975 /* GhosttyTerminalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5862560F5E8488F3EFCDFE26 /* GhosttyTerminalView.swift */; };
@@ -66,14 +66,14 @@
 		65AD92119EC7A515554AC900 /* GhosttySurfaceBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosttySurfaceBridge.swift; sourceTree = "<group>"; };
 		6D62DD9042DB25030452E912 /* GhosttyKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GhosttyKit.xcframework; sourceTree = "<group>"; };
 		730558BDAB14FEBBED35D4C9 /* ghostty */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ghostty; sourceTree = "<group>"; };
-		7B0CF197EFA928EAA5669DCB /* PiDesktopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiDesktopApp.swift; sourceTree = "<group>"; };
+		7B0CF197EFA928EAA5669DCB /* BourbakiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BourbakiApp.swift; sourceTree = "<group>"; };
 		7DE8C4842F3DF7FE00B916E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7DE8C4862F3DF86200B916E1 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		95EA61D5AC541B7A29465FBB /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		9A6348D0DE49F359B61604E2 /* terminfo */ = {isa = PBXFileReference; lastKnownFileType = folder; path = terminfo; sourceTree = "<group>"; };
 		EE0009010000000100000001 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Fonts; sourceTree = "<group>"; };
 		A1ED51BAFDE5D4871419B014 /* GhosttyShortcutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosttyShortcutManager.swift; sourceTree = "<group>"; };
-		A97C29AD63741CF438998CE6 /* PiDesktop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PiDesktop.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A97C29AD63741CF438998CE6 /* Bourbaki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bourbaki.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA0001010000000100000001 /* TerminalTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalTab.swift; sourceTree = "<group>"; };
 		AA0001010000000100000002 /* TerminalTabManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalTabManager.swift; sourceTree = "<group>"; };
 		AA0001010000000100000003 /* TerminalTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalTabBarView.swift; sourceTree = "<group>"; };
@@ -126,17 +126,17 @@
 			isa = PBXGroup;
 			children = (
 				7DE8C4862F3DF86200B916E1 /* AppIcon.icon */,
-				80D2865255AFF7F737C7183C /* PiDesktop */,
+				80D2865255AFF7F737C7183C /* Bourbaki */,
 				175C932161BEBF3B8BB1F58C /* Frameworks */,
 				F46FB683FBA087970B5F7032 /* Resources */,
 				BF7A2D27A78D590BDEF15AF2 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		80D2865255AFF7F737C7183C /* PiDesktop */ = {
+		80D2865255AFF7F737C7183C /* Bourbaki */ = {
 			isa = PBXGroup;
 			children = (
-				7B0CF197EFA928EAA5669DCB /* PiDesktopApp.swift */,
+				7B0CF197EFA928EAA5669DCB /* BourbakiApp.swift */,
 				CC0007010000000100000001 /* App */,
 				CC0004010000000100000001 /* Models */,
 				CC0004010000000100000002 /* Services */,
@@ -144,7 +144,7 @@
 				CC0001010000000100000001 /* Features */,
 				CC0009010000000100000001 /* Theme */,
 			);
-			path = PiDesktop;
+			path = Bourbaki;
 			sourceTree = "<group>";
 		};
 		9DCED3047020D506EE5C9C7F /* Ghostty */ = {
@@ -173,7 +173,7 @@
 		BF7A2D27A78D590BDEF15AF2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A97C29AD63741CF438998CE6 /* PiDesktop.app */,
+				A97C29AD63741CF438998CE6 /* Bourbaki.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -264,9 +264,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		90FE9A328CF662A7A918906D /* PiDesktop */ = {
+		90FE9A328CF662A7A918906D /* Bourbaki */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F707ED8CFBC457F7F618ECA6 /* Build configuration list for PBXNativeTarget "PiDesktop" */;
+			buildConfigurationList = F707ED8CFBC457F7F618ECA6 /* Build configuration list for PBXNativeTarget "Bourbaki" */;
 			buildPhases = (
 				E7209FB05162B7572F88D05E /* Sources */,
 				29B2D46AA747A59804D46E1F /* Frameworks */,
@@ -277,9 +277,9 @@
 			);
 			dependencies = (
 			);
-			name = PiDesktop;
-			productName = PiDesktop;
-			productReference = A97C29AD63741CF438998CE6 /* PiDesktop.app */;
+			name = Bourbaki;
+			productName = Bourbaki;
+			productReference = A97C29AD63741CF438998CE6 /* Bourbaki.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -289,7 +289,7 @@
 			isa = PBXProject;
 			attributes = {
 			};
-			buildConfigurationList = CB7CBE0C3B42E7D081FECC31 /* Build configuration list for PBXProject "PiDesktop" */;
+			buildConfigurationList = CB7CBE0C3B42E7D081FECC31 /* Build configuration list for PBXProject "Bourbaki" */;
 			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -302,7 +302,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				90FE9A328CF662A7A918906D /* PiDesktop */,
+				90FE9A328CF662A7A918906D /* Bourbaki */,
 			);
 		};
 /* End PBXProject section */
@@ -327,7 +327,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				33C5669C33600A453399CD0D /* PiDesktopApp.swift in Sources */,
+				33C5669C33600A453399CD0D /* BourbakiApp.swift in Sources */,
 				0BF7673E67776E22E197FEC6 /* GhosttyRuntime.swift in Sources */,
 				BC1EE5B4D1588FF3CEDB8DEB /* GhosttySurfaceView.swift in Sources */,
 				397850A493A2E06CFA3A1A07 /* GhosttySurfaceBridge.swift in Sources */,
@@ -392,7 +392,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -Xcc -Wno-incomplete-umbrella";
-				PRODUCT_BUNDLE_IDENTIFIER = com.tudoroancea.PiDesktop;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tudoroancea.Bourbaki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -429,7 +429,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -Xcc -Wno-incomplete-umbrella";
-				PRODUCT_BUNDLE_IDENTIFIER = com.tudoroancea.PiDesktop;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tudoroancea.Bourbaki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -552,7 +552,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CB7CBE0C3B42E7D081FECC31 /* Build configuration list for PBXProject "PiDesktop" */ = {
+		CB7CBE0C3B42E7D081FECC31 /* Build configuration list for PBXProject "Bourbaki" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EC86DC4F4B4C60C3EC031655 /* Debug */,
@@ -561,7 +561,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F707ED8CFBC457F7F618ECA6 /* Build configuration list for PBXNativeTarget "PiDesktop" */ = {
+		F707ED8CFBC457F7F618ECA6 /* Build configuration list for PBXNativeTarget "Bourbaki" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				339F2120A275E8028CC42767 /* Debug */,

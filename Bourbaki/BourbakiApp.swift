@@ -14,7 +14,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     let alert = NSAlert()
-    alert.messageText = "Quit PiDesktop?"
+    alert.messageText = "Quit Bourbaki?"
     alert.informativeText = "You still have terminals running. Are you sure you want to quit?"
     alert.alertStyle = .warning
     alert.addButton(withTitle: "Quit")
@@ -29,7 +29,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 private enum GhosttyCLI {
   static let argv: [UnsafeMutablePointer<CChar>?] = {
     var args: [UnsafeMutablePointer<CChar>?] = []
-    let executable = CommandLine.arguments.first ?? "PiDesktop"
+    let executable = CommandLine.arguments.first ?? "Bourbaki"
     args.append(strdup(executable))
     for shortcut in AppShortcuts.all {
       args.append(strdup("--keybind=\(shortcut.ghosttyKeybind)=unbind"))
@@ -41,7 +41,7 @@ private enum GhosttyCLI {
 
 @main
 @MainActor
-struct PiDesktopApp: App {
+struct BourbakiApp: App {
   @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
   @State private var ghostty: GhosttyRuntime
   @State private var tabManager: TerminalTabManager
@@ -80,7 +80,7 @@ struct PiDesktopApp: App {
   }
 
   var body: some Scene {
-    Window("PiDesktop", id: "main") {
+    Window("Bourbaki", id: "main") {
       GhosttyColorSchemeSyncView(ghostty: ghostty) {
         MainContentView(tabManager: tabManager, projectStore: projectStore)
       }

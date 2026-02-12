@@ -28,7 +28,7 @@ struct TerminalDetailView: View {
 
   private var windowTitle: String {
     guard let worktreePath = tabManager.selectedWorktreePath else {
-      return "PiDesktop"
+      return "Bourbaki"
     }
     let standardized = worktreePath.standardizedFileURL
 
@@ -36,14 +36,14 @@ struct TerminalDetailView: View {
       if let worktree = project.worktrees.first(where: {
         $0.path.standardizedFileURL == standardized
       }) {
-        return "PiDesktop — \(project.name) · \(worktree.name)"
+        return "\(project.name) · \(worktree.name)"
       }
       if project.rootPath.standardizedFileURL == standardized {
-        return "PiDesktop — \(project.name)"
+        return "\(project.name)"
       }
     }
 
-    return "PiDesktop — \(worktreePath.lastPathComponent)"
+    return "\(worktreePath.lastPathComponent)"
   }
 
   private var worktreeEmptyState: some View {

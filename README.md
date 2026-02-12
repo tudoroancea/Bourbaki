@@ -1,4 +1,4 @@
-# PiDesktop
+# Bourbaki
 
 A macOS-native desktop app for managing [pi](https://github.com/mariozechner/pi-coding-agent) coding agent sessions across multiple projects and git worktrees.
 
@@ -8,9 +8,15 @@ A macOS-native desktop app for managing [pi](https://github.com/mariozechner/pi-
 ![Swift](https://img.shields.io/badge/Swift-5-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
+## Why "Bourbaki"?
+
+[Nicolas Bourbaki](https://en.wikipedia.org/wiki/Nicolas_Bourbaki) was the collective pseudonym of a group of mathematicians who published foundational works under a single shared name. No individual credit — the work spoke for itself.
+
+This app embodies the same idea: a single interface commanding an army of anonymous AI agents — Claude, GPT, whatever comes next — all working toward the same cause without taking credit. The agents are interchangeable; what matters is the code they produce together.
+
 ## What it does
 
-PiDesktop gives you a single window to manage all your pi sessions, with:
+Bourbaki gives you a single window to manage all your pi sessions, with:
 
 - **Project sidebar** — register local repos, see their git worktrees with live `+/-` diff stats and session status indicators (running / idle / stopped)
 - **Tabbed terminal panes** — each tab is a full terminal (powered by [Ghostty](https://ghostty.org)'s `libghostty`) running one of:
@@ -44,8 +50,8 @@ PiDesktop gives you a single window to manage all your pi sessions, with:
 
 ```bash
 # Clone with submodules
-git clone --recursive git@github.com:tudoroancea/PiDesktop.git
-cd PiDesktop
+git clone --recursive git@github.com:tudoroancea/Bourbaki.git
+cd Bourbaki
 
 # Build GhosttyKit from source (~5 min first time)
 make build-ghostty-xcframework
@@ -80,7 +86,7 @@ All app-level keybindings use `Cmd+Ctrl` or `Cmd+Shift` combos to avoid collisio
 ## Roadmap
 
 - [x] Make the tab bar more native (closer to Ghostty's tab bar style)
-- [x] Show active worktree name/path in the title bar (next to "PiDesktop")
+- [x] Show active worktree name/path in the title bar
 - [ ] Pinned worktrees
 - [x] Keybindings to switch between active worktrees
 - [ ] Periodically reload the worktree list and git diff stats in the background

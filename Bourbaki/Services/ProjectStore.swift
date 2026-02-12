@@ -10,7 +10,7 @@ final class ProjectStore {
 
   init() {
     let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-    let appDir = appSupport.appendingPathComponent("PiDesktop", isDirectory: true)
+    let appDir = appSupport.appendingPathComponent("Bourbaki", isDirectory: true)
     try? FileManager.default.createDirectory(at: appDir, withIntermediateDirectories: true)
     storageURL = appDir.appendingPathComponent("projects.json")
     load()
