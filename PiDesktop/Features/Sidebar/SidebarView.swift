@@ -5,6 +5,7 @@ struct SidebarView: View {
   @Bindable var tabManager: TerminalTabManager
   @State private var searchText = ""
   @State private var showingAddProject = false
+  @State private var collapsedProjects: Set<UUID> = []
 
   var body: some View {
     List {
@@ -12,8 +13,25 @@ struct SidebarView: View {
         ProjectSectionView(
           project: project,
           tabManager: tabManager,
-          onRemove: { projectStore.removeProject(project.id) }
+          isExpanded: Binding(
+            get: { !collapsedProjects.contains(project.id) },
+            set: { newValue in
+              if newValue {
+                collapsedProjects.remove(project.id)
+              } else {
+                collapsedProjects.insert(project.id)
+              }
+            }
+          ),
+          onRemove: { projectStore.removeProject(project.id) },
+          onRefresh: { await projectStore.refresh() }
         )
+        .listRowSeparator(.hidden)
+        .listRowInsets(EdgeInsets(top: 2, leading: 8, bottom: 2, trailing: 8))
+        .listRowBackground(Color.clear)
+      }
+      .onMove { source, destination in
+        projectStore.moveProject(from: source, to: destination)
       }
     }
     .listStyle(.sidebar)
@@ -28,7 +46,7 @@ struct SidebarView: View {
         } label: {
           Image(systemName: "arrow.clockwise")
         }
-        .help("Refresh")
+        .help("Refresh all projects")
         .buttonStyle(.borderless)
 
         Spacer()
@@ -38,7 +56,7 @@ struct SidebarView: View {
         } label: {
           Image(systemName: "plus")
         }
-        .help("Add Project")
+        .help("Add a project folder")
         .buttonStyle(.borderless)
       }
       .padding(.horizontal, 12)

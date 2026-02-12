@@ -32,6 +32,8 @@
 		BB0004010000000100000007 /* ProjectSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0004010000000100000007 /* ProjectSectionView.swift */; };
 		BB0004010000000100000008 /* WorktreeRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0004010000000100000008 /* WorktreeRowView.swift */; };
 		BB0004010000000100000009 /* GitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0004010000000100000009 /* GitService.swift */; };
+		BB000401000000010000000C /* CreateWorktreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000401000000010000000C /* CreateWorktreeView.swift */; };
+		BB000401000000010000000D /* DeleteWorktreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000401000000010000000D /* DeleteWorktreeView.swift */; };
 		BB000401000000010000000A /* SessionScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000401000000010000000A /* SessionScanner.swift */; };
 		BB000401000000010000000B /* ProcessMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000401000000010000000B /* ProcessMonitor.swift */; };
 		BB0007010000000100000001 /* AppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0007010000000100000001 /* AppShortcuts.swift */; };
@@ -82,6 +84,8 @@
 		AA0004010000000100000007 /* ProjectSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSectionView.swift; sourceTree = "<group>"; };
 		AA0004010000000100000008 /* WorktreeRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorktreeRowView.swift; sourceTree = "<group>"; };
 		AA0004010000000100000009 /* GitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitService.swift; sourceTree = "<group>"; };
+		AA000401000000010000000C /* CreateWorktreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateWorktreeView.swift; sourceTree = "<group>"; };
+		AA000401000000010000000D /* DeleteWorktreeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteWorktreeView.swift; sourceTree = "<group>"; };
 		AA000401000000010000000A /* SessionScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionScanner.swift; sourceTree = "<group>"; };
 		AA000401000000010000000B /* ProcessMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessMonitor.swift; sourceTree = "<group>"; };
 		AA0007010000000100000001 /* AppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShortcuts.swift; sourceTree = "<group>"; };
@@ -218,6 +222,8 @@
 				AA0004010000000100000006 /* SidebarView.swift */,
 				AA0004010000000100000007 /* ProjectSectionView.swift */,
 				AA0004010000000100000008 /* WorktreeRowView.swift */,
+				AA000401000000010000000C /* CreateWorktreeView.swift */,
+				AA000401000000010000000D /* DeleteWorktreeView.swift */,
 			);
 			path = Sidebar;
 			sourceTree = "<group>";
@@ -338,6 +344,8 @@
 				BB0004010000000100000009 /* GitService.swift in Sources */,
 				BB000401000000010000000A /* SessionScanner.swift in Sources */,
 				BB000401000000010000000B /* ProcessMonitor.swift in Sources */,
+				BB000401000000010000000C /* CreateWorktreeView.swift in Sources */,
+				BB000401000000010000000D /* DeleteWorktreeView.swift in Sources */,
 				BB0007010000000100000001 /* AppShortcuts.swift in Sources */,
 				BB0009010000000100000001 /* RosePineTheme.swift in Sources */,
 				BB0009010000000100000002 /* WindowStyling.swift in Sources */,

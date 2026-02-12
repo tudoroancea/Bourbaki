@@ -84,7 +84,7 @@ All app-level keybindings use `Cmd+Ctrl` or `Cmd+Shift` combos to avoid collisio
 - [ ] Pinned worktrees
 - [x] Keybindings to switch between active worktrees
 - [ ] Periodically reload the worktree list and git diff stats in the background
-- [ ] Worktree management: create and delete worktrees (from existing branch, or with new branch)
+- [x] Worktree management: create and delete worktrees (from existing branch, or with new branch)
 
 ## License
 

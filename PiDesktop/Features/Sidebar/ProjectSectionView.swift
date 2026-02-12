@@ -3,31 +3,99 @@ import SwiftUI
 struct ProjectSectionView: View {
   let project: Project
   @Bindable var tabManager: TerminalTabManager
+  @Binding var isExpanded: Bool
   var onRemove: (() -> Void)?
+  var onRefresh: (() async -> Void)?
+
+  @State private var showingCreateWorktree = false
+  @State private var worktreeToDelete: ProjectWorktree?
+  @State private var isHoveringHeader = false
 
   var body: some View {
-    Section {
-      if project.worktrees.isEmpty {
-        worktreeRow(name: project.name, path: project.rootPath, worktree: nil)
-      } else {
-        ForEach(project.worktrees) { worktree in
-          worktreeRow(name: worktree.name, path: worktree.path, worktree: worktree)
+    VStack(spacing: 0) {
+      // MARK: - Project Header
+      HStack {
+        Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
+          .font(.system(size: 10, weight: .semibold))
+          .foregroundStyle(RosePine.subtle)
+          .frame(width: 12)
+
+        Text(project.name)
+          .font(.system(size: 14, weight: .semibold))
+          .foregroundStyle(RosePine.text)
+
+        Spacer()
+
+        if isHoveringHeader {
+          Button {
+            showingCreateWorktree = true
+          } label: {
+            Image(systemName: "plus")
+              .font(.caption)
+              .foregroundStyle(RosePine.subtle)
+          }
+          .buttonStyle(.plain)
+          .help("Create a new worktree")
+          .padding(.trailing, 4)
         }
       }
-    } header: {
-      HStack {
-        Text(project.name)
-        Spacer()
+      .padding(.vertical, 6)
+      .padding(.horizontal, 8)
+      .frame(maxWidth: .infinity, alignment: .leading)
+      .contentShape(RoundedRectangle(cornerRadius: 8))
+      .overlay(
+        RoundedRectangle(cornerRadius: 8)
+          .strokeBorder(RosePine.highlightMed, lineWidth: 1)
+          .opacity(isHoveringHeader ? 1 : 0)
+      )
+      .onHover { hovering in
+        isHoveringHeader = hovering
+      }
+      .onTapGesture {
+        isExpanded.toggle()
       }
       .contextMenu {
+        Button("New Worktree…") {
+          showingCreateWorktree = true
+        }
+        Divider()
         Button("Open in Zed") {
-          openInZed(path: project.rootPath)
+          ExternalAppLauncher.openInZed(path: project.rootPath)
         }
         Divider()
         Button("Remove Project", role: .destructive) {
           onRemove?()
         }
       }
+
+      // MARK: - Worktree List
+      if isExpanded {
+        VStack(spacing: 2) {
+          if project.worktrees.isEmpty {
+            worktreeRow(name: project.name, path: project.rootPath, worktree: nil)
+          } else {
+            ForEach(project.worktrees) { worktree in
+              worktreeRow(name: worktree.name, path: worktree.path, worktree: worktree)
+            }
+          }
+        }
+        .padding(.top, 4)
+        .padding(.leading, 12)
+      }
+    }
+    .sheet(isPresented: $showingCreateWorktree) {
+      CreateWorktreeView(projectRootPath: project.rootPath) {
+        Task { await onRefresh?() }
+      }
+    }
+    .sheet(item: $worktreeToDelete) { worktree in
+      DeleteWorktreeView(
+        projectRootPath: project.rootPath,
+        worktree: worktree,
+        onDeleted: {
+          Task { await onRefresh?() }
+        }
+      )
     }
   }
 
@@ -35,20 +103,26 @@ struct ProjectSectionView: View {
     let isSelected = tabManager.selectedWorktreePath?.standardizedFileURL == path.standardizedFileURL
     let status = tabManager.sessionStatus(for: path)
 
-    return Button {
-      tabManager.selectWorktree(path)
-    } label: {
-      WorktreeRowView(
-        name: name,
-        addedLines: worktree?.addedLines,
-        removedLines: worktree?.removedLines,
-        sessionStatus: status
-      )
-    }
-    .buttonStyle(.plain)
-    .listRowBackground(
-      isSelected ? RosePine.sidebarSelected : Color.clear
+    let canDelete = worktree != nil &&
+      worktree!.path.standardizedFileURL != project.rootPath.standardizedFileURL
+
+    return WorktreeRowView(
+      name: name,
+      addedLines: worktree?.addedLines,
+      removedLines: worktree?.removedLines,
+      sessionStatus: status,
+      onDelete: canDelete ? { worktreeToDelete = worktree } : nil
     )
+    .padding(.horizontal, 8)
+    .padding(.vertical, 4)
+    .background(
+      RoundedRectangle(cornerRadius: 8)
+        .fill(isSelected ? RosePine.sidebarSelected : Color.clear)
+    )
+    .contentShape(RoundedRectangle(cornerRadius: 8))
+    .onTapGesture {
+      tabManager.selectWorktree(path)
+    }
     .contextMenu {
       Button("Open Pi Session") {
         tabManager.createTab(type: .pi, workingDirectory: path)
@@ -64,15 +138,14 @@ struct ProjectSectionView: View {
       }
       Divider()
       Button("Open in Zed") {
-        openInZed(path: path)
+        ExternalAppLauncher.openInZed(path: path)
+      }
+      if let worktree, worktree.path.standardizedFileURL != project.rootPath.standardizedFileURL {
+        Divider()
+        Button("Delete Worktree…", role: .destructive) {
+          worktreeToDelete = worktree
+        }
       }
     }
-  }
-
-  private func openInZed(path: URL) {
-    let process = Process()
-    process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-    process.arguments = ["zed", path.path]
-    try? process.run()
   }
 }
