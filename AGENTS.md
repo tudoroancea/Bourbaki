@@ -47,6 +47,16 @@ Changes from supacode originals:
 
 All app-level keybindings are defined in `Bourbaki/App/AppShortcuts.swift`. They are **unbound from ghostty** at init time via `--keybind=<bind>=unbind` CLI args passed to `ghostty_init` (same pattern as supacode). The ghostty unbind format uses `ctrl`/`alt`/`shift`/`super` modifiers joined by `+`.
 
+## Tool Naming (UI)
+
+Tools are presented in the UI with generic names decoupled from the underlying CLI tools:
+- **agent** (was "pi") — `TabType.agent`, runs `exec pi`
+- **git** (was "lazygit") — `TabType.git`, runs `exec lazygit`
+- **diff** (was "lumen diff") — `TabType.diff`, runs `exec lumen diff`
+- **editor** (was "zed") — `ExternalAppLauncher.openInEditor`, runs `open -a Zed`
+
+All menus, context menus, keybind labels, and help strings use these generic names.
+
 Key bindings use `Cmd+Ctrl` and `Cmd+Shift` combos to avoid collisions with both ghostty defaults (`Cmd+T/W/N/1-9`) and pi keybindings (`Ctrl+P/L/C/D`).
 
 ## Dashboard / Recent Worktrees

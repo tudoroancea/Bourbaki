@@ -76,8 +76,8 @@ final class TerminalTabManager {
       return
     }
 
-    // No tabs for this worktree — open a pi session by default
-    createTab(type: .pi, workingDirectory: path)
+    // No tabs for this worktree — open an agent session by default
+    createTab(type: .agent, workingDirectory: path)
   }
 
   /// Record a worktree open in the recent store.
@@ -250,21 +250,21 @@ final class TerminalTabManager {
     selectWorktree(paths[index])
   }
 
-  /// Check if there's an active pi tab running in the given worktree.
+  /// Check if there's an active agent tab running in the given worktree.
   func sessionStatus(for worktreePath: URL) -> SessionStatus {
     let allWorktreeTabs = tabs.filter {
       $0.worktreePath.standardizedFileURL == worktreePath.standardizedFileURL
     }
-    let piTabs = allWorktreeTabs.filter { $0.type == .pi }
+    let agentTabs = allWorktreeTabs.filter { $0.type == .agent }
 
-    if !piTabs.isEmpty {
-      if piTabs.contains(where: { $0.isRunning }) {
+    if !agentTabs.isEmpty {
+      if agentTabs.contains(where: { $0.isRunning }) {
         return .running
       }
       return .idle
     }
 
-    // No pi sessions — check for any other open terminals
+    // No agent sessions — check for any other open terminals
     if !allWorktreeTabs.isEmpty {
       return .terminal
     }

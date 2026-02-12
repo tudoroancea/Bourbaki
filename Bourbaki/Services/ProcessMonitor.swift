@@ -1,6 +1,6 @@
 import Foundation
 
-/// Checks whether a pi process is running in a given directory.
+/// Checks whether an agent process is running in a given directory.
 enum ProcessMonitor {
 
   /// Check if a `pi` or `node` process is running with the given directory as its cwd.
@@ -22,7 +22,7 @@ enum ProcessMonitor {
 
   // MARK: - Private
 
-  /// Find PIDs of processes that look like pi (node/bun running pi).
+  /// Find PIDs of processes that look like the agent (node/bun running pi).
   private static func findPiPids() -> [Int] {
     guard let output = runProcess("/bin/ps", arguments: ["-eo", "pid,comm"]) else {
       return []

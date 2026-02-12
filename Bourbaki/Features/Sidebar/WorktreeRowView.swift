@@ -111,17 +111,17 @@ struct WorktreeRowView: View {
       Circle()
         .fill(RosePine.statusRunning)
         .frame(width: 8, height: 8)
-        .help("Pi session running")
+        .help("Agent session running")
     case .idle:
       Circle()
         .fill(RosePine.statusIdle)
         .frame(width: 8, height: 8)
-        .help("Pi session idle")
+        .help("Agent session idle")
     case .terminal:
       Circle()
         .fill(RosePine.statusTerminal)
         .frame(width: 8, height: 8)
-        .help("Terminal open (no pi session)")
+        .help("Terminal open (no agent session)")
     case .stopped:
       Circle()
         .strokeBorder(RosePine.statusStopped, lineWidth: 1)

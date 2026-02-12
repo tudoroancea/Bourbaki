@@ -103,43 +103,43 @@ struct BourbakiApp: App {
         )
         .disabled(tabManager.selectedWorktreePath == nil)
 
-        Button("Open Pi") {
+        Button("Open Agent") {
           guard let dir = tabManager.selectedWorktreePath else { return }
-          tabManager.createTab(type: .pi, workingDirectory: dir)
+          tabManager.createTab(type: .agent, workingDirectory: dir)
         }
         .keyboardShortcut(
-          AppShortcuts.openPi.keyEquivalent,
-          modifiers: AppShortcuts.openPi.modifiers
+          AppShortcuts.openAgent.keyEquivalent,
+          modifiers: AppShortcuts.openAgent.modifiers
         )
         .disabled(tabManager.selectedWorktreePath == nil)
 
-        Button("Open Lazygit") {
+        Button("Open Git") {
           guard let dir = tabManager.selectedWorktreePath else { return }
-          tabManager.createTab(type: .lazygit, workingDirectory: dir)
+          tabManager.createTab(type: .git, workingDirectory: dir)
         }
         .keyboardShortcut(
-          AppShortcuts.openLazygit.keyEquivalent,
-          modifiers: AppShortcuts.openLazygit.modifiers
+          AppShortcuts.openGit.keyEquivalent,
+          modifiers: AppShortcuts.openGit.modifiers
         )
         .disabled(tabManager.selectedWorktreePath == nil)
 
-        Button("Open Lumen Diff") {
+        Button("Open Diff") {
           guard let dir = tabManager.selectedWorktreePath else { return }
-          tabManager.createTab(type: .lumenDiff, workingDirectory: dir)
+          tabManager.createTab(type: .diff, workingDirectory: dir)
         }
         .keyboardShortcut(
-          AppShortcuts.openLumenDiff.keyEquivalent,
-          modifiers: AppShortcuts.openLumenDiff.modifiers
+          AppShortcuts.openDiff.keyEquivalent,
+          modifiers: AppShortcuts.openDiff.modifiers
         )
         .disabled(tabManager.selectedWorktreePath == nil)
 
-        Button("Open in Zed") {
+        Button("Open in Editor") {
           guard let dir = tabManager.selectedWorktreePath else { return }
-          ExternalAppLauncher.openInZed(path: dir)
+          ExternalAppLauncher.openInEditor(path: dir)
         }
         .keyboardShortcut(
-          AppShortcuts.openInZed.keyEquivalent,
-          modifiers: AppShortcuts.openInZed.modifiers
+          AppShortcuts.openInEditor.keyEquivalent,
+          modifiers: AppShortcuts.openInEditor.modifiers
         )
         .disabled(tabManager.selectedWorktreePath == nil)
 
@@ -241,7 +241,7 @@ struct BourbakiApp: App {
 // MARK: - External App Launcher
 
 enum ExternalAppLauncher {
-  static func openInZed(path: URL) {
+  static func openInEditor(path: URL) {
     let process = Process()
     process.executableURL = URL(fileURLWithPath: "/usr/bin/open")
     process.arguments = ["-a", "Zed", path.path]

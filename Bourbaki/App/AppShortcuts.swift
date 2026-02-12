@@ -45,10 +45,10 @@ struct AppShortcut {
 enum AppShortcuts {
   // File menu — open tabs
   static let newTerminal = AppShortcut(key: "t", modifiers: [.command])
-  static let openPi = AppShortcut(key: "p", modifiers: [.command])
-  static let openLazygit = AppShortcut(key: "l", modifiers: [.command])
-  static let openLumenDiff = AppShortcut(key: "d", modifiers: [.command])
-  static let openInZed = AppShortcut(key: "o", modifiers: [.command])
+  static let openAgent = AppShortcut(key: "p", modifiers: [.command])
+  static let openGit = AppShortcut(key: "l", modifiers: [.command])
+  static let openDiff = AppShortcut(key: "d", modifiers: [.command])
+  static let openInEditor = AppShortcut(key: "o", modifiers: [.command])
   static let closeTab = AppShortcut(key: "w", modifiers: [.command])
   static let closeWindow = AppShortcut(key: "w", modifiers: [.command, .shift])
 
@@ -97,10 +97,10 @@ enum AppShortcuts {
   /// All shortcuts that need to be unbound from ghostty so the app can handle them.
   static let all: [AppShortcut] = [
     newTerminal,
-    openPi,
-    openLazygit,
-    openLumenDiff,
-    openInZed,
+    openAgent,
+    openGit,
+    openDiff,
+    openInEditor,
     closeTab,
     closeWindow,
     nextTab,

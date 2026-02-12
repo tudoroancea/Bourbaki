@@ -59,8 +59,8 @@ struct ProjectSectionView: View {
           showingCreateWorktree = true
         }
         Divider()
-        Button("Open in Zed") {
-          ExternalAppLauncher.openInZed(path: project.rootPath)
+        Button("Open in Editor") {
+          ExternalAppLauncher.openInEditor(path: project.rootPath)
         }
         Divider()
         Button("Remove Project", role: .destructive) {
@@ -118,21 +118,21 @@ struct ProjectSectionView: View {
       onSelect: { tabManager.selectWorktree(path) }
     )
     .contextMenu {
-      Button("Open Pi Session") {
-        tabManager.createTab(type: .pi, workingDirectory: path)
+      Button("Open Agent Session") {
+        tabManager.createTab(type: .agent, workingDirectory: path)
       }
-      Button("Open Lazygit") {
-        tabManager.createTab(type: .lazygit, workingDirectory: path)
+      Button("Open Git") {
+        tabManager.createTab(type: .git, workingDirectory: path)
       }
-      Button("Open Lumen Diff") {
-        tabManager.createTab(type: .lumenDiff, workingDirectory: path)
+      Button("Open Diff") {
+        tabManager.createTab(type: .diff, workingDirectory: path)
       }
       Button("Open Shell") {
         tabManager.createTab(type: .shell, workingDirectory: path)
       }
       Divider()
-      Button("Open in Zed") {
-        ExternalAppLauncher.openInZed(path: path)
+      Button("Open in Editor") {
+        ExternalAppLauncher.openInEditor(path: path)
       }
       if let worktree, worktree.path.standardizedFileURL != project.rootPath.standardizedFileURL {
         Divider()

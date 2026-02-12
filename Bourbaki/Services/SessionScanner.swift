@@ -1,15 +1,15 @@
 import Foundation
 
-/// Scans `~/.pi/agent/sessions/` for pi session files associated with projects.
+/// Scans `~/.pi/agent/sessions/` for agent session files associated with projects.
 enum SessionScanner {
 
-  /// Base directory for all pi sessions.
+  /// Base directory for all agent sessions.
   private static let sessionsBaseURL: URL = {
     FileManager.default.homeDirectoryForCurrentUser
       .appendingPathComponent(".pi/agent/sessions", isDirectory: true)
   }()
 
-  /// Find pi sessions associated with a given worktree path.
+  /// Find agent sessions associated with a given worktree path.
   static func sessions(for worktreePath: URL) -> [PiSession] {
     let fm = FileManager.default
     let sessionDirs = findSessionDirectories(for: worktreePath)
@@ -33,7 +33,7 @@ enum SessionScanner {
     return sessions
   }
 
-  /// Determine the session status for a worktree based on whether a pi process is active.
+  /// Determine the session status for a worktree based on whether an agent process is active.
   static func sessionStatus(for worktreePath: URL) async -> SessionStatus {
     return await ProcessMonitor.isPiRunning(in: worktreePath) ? .idle : .stopped
   }

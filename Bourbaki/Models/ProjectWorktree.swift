@@ -17,6 +17,6 @@ struct ProjectWorktree: Identifiable, Hashable {
   /// Lines removed since last commit (from `git diff --shortstat`).
   var removedLines: Int?
 
-  /// Pi sessions associated with this worktree.
+  /// Agent sessions associated with this worktree.
   var sessions: [PiSession] = []
 }

@@ -1,25 +1,25 @@
 import Foundation
 
 enum TabType: String, Codable, Hashable {
-  case pi
-  case lazygit
-  case lumenDiff
+  case agent
+  case git
+  case diff
   case shell
 
   var displayName: String {
     switch self {
-    case .pi: return "pi"
-    case .lazygit: return "lazygit"
-    case .lumenDiff: return "lumen diff"
+    case .agent: return "agent"
+    case .git: return "git"
+    case .diff: return "diff"
     case .shell: return "shell"
     }
   }
 
   var iconName: String {
     switch self {
-    case .pi: return "terminal"
-    case .lazygit: return "arrow.triangle.branch"
-    case .lumenDiff: return "doc.text.magnifyingglass"
+    case .agent: return "terminal"
+    case .git: return "arrow.triangle.branch"
+    case .diff: return "doc.text.magnifyingglass"
     case .shell: return "apple.terminal"
     }
   }
@@ -28,9 +28,9 @@ enum TabType: String, Codable, Hashable {
   /// Uses `exec` so the shell is replaced by the command — when it exits, the surface closes.
   var command: String? {
     switch self {
-    case .pi: return "clear && exec pi"
-    case .lazygit: return "clear && exec lazygit"
-    case .lumenDiff: return "clear && exec lumen diff"
+    case .agent: return "clear && exec pi"
+    case .git: return "clear && exec lazygit"
+    case .diff: return "clear && exec lumen diff"
     case .shell: return nil // just opens the default shell
     }
   }
