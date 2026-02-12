@@ -10,8 +10,7 @@ struct RosePineWindowStyle: ViewModifier {
         guard let window else { return }
         window.titlebarAppearsTransparent = true
         window.backgroundColor = RosePine.nsBase
-        // Allow the content to extend into the titlebar area
-        window.titleVisibility = .hidden
+        window.titleVisibility = .visible
         // Use full-size content view so sidebar + detail fill behind titlebar
         window.styleMask.insert(.fullSizeContentView)
       })

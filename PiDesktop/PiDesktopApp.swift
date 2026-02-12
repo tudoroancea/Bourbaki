@@ -213,7 +213,7 @@ private struct MainContentView: View {
       SidebarView(projectStore: projectStore, tabManager: tabManager)
         .background(RosePine.surface)
     } detail: {
-      TerminalDetailView(tabManager: tabManager)
+      TerminalDetailView(tabManager: tabManager, projectStore: projectStore)
     }
     .frame(minWidth: 800, minHeight: 500)
     .rosePineWindow()

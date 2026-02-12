@@ -2,12 +2,12 @@ import SwiftUI
 
 struct TerminalDetailView: View {
   @Bindable var tabManager: TerminalTabManager
+  @Bindable var projectStore: ProjectStore
 
   var body: some View {
     VStack(spacing: 0) {
       if !tabManager.visibleTabs.isEmpty {
         TerminalTabBarView(tabManager: tabManager)
-        Divider()
       }
 
       ZStack {
@@ -23,6 +23,27 @@ struct TerminalDetailView: View {
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .background(RosePine.base)
     }
+    .background(WindowTitleUpdater(title: windowTitle))
+  }
+
+  private var windowTitle: String {
+    guard let worktreePath = tabManager.selectedWorktreePath else {
+      return "PiDesktop"
+    }
+    let standardized = worktreePath.standardizedFileURL
+
+    for project in projectStore.projects {
+      if let worktree = project.worktrees.first(where: {
+        $0.path.standardizedFileURL == standardized
+      }) {
+        return "PiDesktop — \(project.name) · \(worktree.name)"
+      }
+      if project.rootPath.standardizedFileURL == standardized {
+        return "PiDesktop — \(project.name)"
+      }
+    }
+
+    return "PiDesktop — \(worktreePath.lastPathComponent)"
   }
 
   private var worktreeEmptyState: some View {
@@ -51,5 +72,23 @@ struct TerminalDetailView: View {
         .font(.subheadline)
         .foregroundStyle(RosePine.muted)
     }
+  }
+}
+
+// MARK: - Window Title Updater
+
+/// An invisible NSViewRepresentable that sets the hosting window's title reactively.
+private struct WindowTitleUpdater: NSViewRepresentable {
+  let title: String
+
+  func makeNSView(context: Context) -> NSView {
+    let view = NSView()
+    view.frame = .zero
+    DispatchQueue.main.async { view.window?.title = title }
+    return view
+  }
+
+  func updateNSView(_ nsView: NSView, context: Context) {
+    DispatchQueue.main.async { nsView.window?.title = title }
   }
 }
