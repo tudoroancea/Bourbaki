@@ -152,6 +152,13 @@ final class GhosttySurfaceView: NSView, Identifiable {
     super.viewDidMoveToWindow()
     updateContentScale()
     updateSurfaceSize()
+    // Request keyboard focus when the surface is added to a window
+    if let window {
+      DispatchQueue.main.async { [weak self] in
+        guard let self, self.window != nil else { return }
+        window.makeFirstResponder(self)
+      }
+    }
   }
 
   override func viewDidChangeBackingProperties() {

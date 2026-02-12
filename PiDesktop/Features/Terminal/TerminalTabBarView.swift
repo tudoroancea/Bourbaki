@@ -6,7 +6,7 @@ struct TerminalTabBarView: View {
   var body: some View {
     ScrollView(.horizontal, showsIndicators: false) {
       HStack(spacing: 2) {
-        ForEach(tabManager.tabs) { tab in
+        ForEach(tabManager.visibleTabs) { tab in
           TabItemView(
             tab: tab,
             isSelected: tabManager.selectedTabID == tab.id,

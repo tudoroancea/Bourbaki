@@ -21,6 +21,17 @@
 		BB0001010000000100000002 /* TerminalTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001010000000100000002 /* TerminalTabManager.swift */; };
 		BB0001010000000100000003 /* TerminalTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001010000000100000003 /* TerminalTabBarView.swift */; };
 		BB0001010000000100000004 /* TerminalDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001010000000100000004 /* TerminalDetailView.swift */; };
+		BB0004010000000100000001 /* SessionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0004010000000100000001 /* SessionStatus.swift */; };
+		BB0004010000000100000002 /* PiSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0004010000000100000002 /* PiSession.swift */; };
+		BB0004010000000100000003 /* ProjectWorktree.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0004010000000100000003 /* ProjectWorktree.swift */; };
+		BB0004010000000100000004 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0004010000000100000004 /* Project.swift */; };
+		BB0004010000000100000005 /* ProjectStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0004010000000100000005 /* ProjectStore.swift */; };
+		BB0004010000000100000006 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0004010000000100000006 /* SidebarView.swift */; };
+		BB0004010000000100000007 /* ProjectSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0004010000000100000007 /* ProjectSectionView.swift */; };
+		BB0004010000000100000008 /* WorktreeRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0004010000000100000008 /* WorktreeRowView.swift */; };
+		BB0004010000000100000009 /* GitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0004010000000100000009 /* GitService.swift */; };
+		BB000401000000010000000A /* SessionScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000401000000010000000A /* SessionScanner.swift */; };
+		BB000401000000010000000B /* ProcessMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000401000000010000000B /* ProcessMonitor.swift */; };
 		BC1EE5B4D1588FF3CEDB8DEB /* GhosttySurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D420DAD2051A9F5053A9B96 /* GhosttySurfaceView.swift */; };
 		CC4EBADB549DFA92B407A6B1 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95EA61D5AC541B7A29465FBB /* Carbon.framework */; };
 		E394CE23DF70A5477738B3DD /* terminfo in Resources */ = {isa = PBXBuildFile; fileRef = 9A6348D0DE49F359B61604E2 /* terminfo */; };
@@ -55,6 +66,17 @@
 		AA0001010000000100000002 /* TerminalTabManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalTabManager.swift; sourceTree = "<group>"; };
 		AA0001010000000100000003 /* TerminalTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalTabBarView.swift; sourceTree = "<group>"; };
 		AA0001010000000100000004 /* TerminalDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalDetailView.swift; sourceTree = "<group>"; };
+		AA0004010000000100000001 /* SessionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStatus.swift; sourceTree = "<group>"; };
+		AA0004010000000100000002 /* PiSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiSession.swift; sourceTree = "<group>"; };
+		AA0004010000000100000003 /* ProjectWorktree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectWorktree.swift; sourceTree = "<group>"; };
+		AA0004010000000100000004 /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
+		AA0004010000000100000005 /* ProjectStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectStore.swift; sourceTree = "<group>"; };
+		AA0004010000000100000006 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		AA0004010000000100000007 /* ProjectSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSectionView.swift; sourceTree = "<group>"; };
+		AA0004010000000100000008 /* WorktreeRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorktreeRowView.swift; sourceTree = "<group>"; };
+		AA0004010000000100000009 /* GitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitService.swift; sourceTree = "<group>"; };
+		AA000401000000010000000A /* SessionScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionScanner.swift; sourceTree = "<group>"; };
+		AA000401000000010000000B /* ProcessMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessMonitor.swift; sourceTree = "<group>"; };
 		D7068A01AADFC8F6055F0125 /* GhosttyRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosttyRuntime.swift; sourceTree = "<group>"; };
 		EF97B0A1B10296473E032F2E /* GhosttySplitAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosttySplitAction.swift; sourceTree = "<group>"; };
 		F03062A7CEDF906A0521C0E3 /* GhosttySurfaceState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosttySurfaceState.swift; sourceTree = "<group>"; };
@@ -96,10 +118,34 @@
 			isa = PBXGroup;
 			children = (
 				7B0CF197EFA928EAA5669DCB /* PiDesktopApp.swift */,
+				CC0004010000000100000001 /* Models */,
+				CC0004010000000100000002 /* Services */,
 				AEA7ABE7831C6F0DB4BBDF00 /* Infrastructure */,
 				CC0001010000000100000001 /* Features */,
 			);
 			path = PiDesktop;
+			sourceTree = "<group>";
+		};
+		CC0004010000000100000001 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AA0004010000000100000004 /* Project.swift */,
+				AA0004010000000100000003 /* ProjectWorktree.swift */,
+				AA0004010000000100000002 /* PiSession.swift */,
+				AA0004010000000100000001 /* SessionStatus.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		CC0004010000000100000002 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				AA0004010000000100000005 /* ProjectStore.swift */,
+				AA0004010000000100000009 /* GitService.swift */,
+				AA000401000000010000000A /* SessionScanner.swift */,
+				AA000401000000010000000B /* ProcessMonitor.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		9DCED3047020D506EE5C9C7F /* Ghostty */ = {
@@ -136,9 +182,20 @@
 		CC0001010000000100000001 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				CC0004010000000100000003 /* Sidebar */,
 				CC0001010000000100000002 /* Terminal */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		CC0004010000000100000003 /* Sidebar */ = {
+			isa = PBXGroup;
+			children = (
+				AA0004010000000100000006 /* SidebarView.swift */,
+				AA0004010000000100000007 /* ProjectSectionView.swift */,
+				AA0004010000000100000008 /* WorktreeRowView.swift */,
+			);
+			path = Sidebar;
 			sourceTree = "<group>";
 		};
 		CC0001010000000100000002 /* Terminal */ = {
@@ -237,6 +294,17 @@
 				BB0001010000000100000002 /* TerminalTabManager.swift in Sources */,
 				BB0001010000000100000003 /* TerminalTabBarView.swift in Sources */,
 				BB0001010000000100000004 /* TerminalDetailView.swift in Sources */,
+				BB0004010000000100000001 /* SessionStatus.swift in Sources */,
+				BB0004010000000100000002 /* PiSession.swift in Sources */,
+				BB0004010000000100000003 /* ProjectWorktree.swift in Sources */,
+				BB0004010000000100000004 /* Project.swift in Sources */,
+				BB0004010000000100000005 /* ProjectStore.swift in Sources */,
+				BB0004010000000100000006 /* SidebarView.swift in Sources */,
+				BB0004010000000100000007 /* ProjectSectionView.swift in Sources */,
+				BB0004010000000100000008 /* WorktreeRowView.swift in Sources */,
+				BB0004010000000100000009 /* GitService.swift in Sources */,
+				BB000401000000010000000A /* SessionScanner.swift in Sources */,
+				BB000401000000010000000B /* ProcessMonitor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

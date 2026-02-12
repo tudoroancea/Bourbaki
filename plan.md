@@ -179,7 +179,7 @@ Wire it to:
 
 Pi extensions that call `ctx.ui.notify()` will trigger these via the terminal's OSC 777 sequence (ghostty supports this natively).
 
-### Phase 4: Side Panel — Project Registry
+### Phase 4: Side Panel — Project Registry ✅
 
 **`ProjectStore`** (`@Observable`, persisted to `UserDefaults` or a JSON file):
 
@@ -217,7 +217,7 @@ struct ProjectWorktree: Identifiable {
 }
 ```
 
-### Phase 5: Worktree & Session Discovery
+### Phase 5: Worktree & Session Discovery ✅
 
 **Git worktree scanning** (simplified from supacode's `GitClient`):
 - Run `git worktree list --porcelain` in project root
@@ -238,7 +238,7 @@ struct ProjectWorktree: Identifiable {
 - Worktree directories for git changes (refresh diff stats)
 - `~/.pi/agent/sessions/` for new/modified session files
 
-### Phase 6: Sidebar UI
+### Phase 6: Sidebar UI ✅
 
 ```
 ┌─────────────────────────┐

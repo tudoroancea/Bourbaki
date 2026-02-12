@@ -7,6 +7,7 @@ import SwiftUI
 struct PiDesktopApp: App {
   @State private var ghostty: GhosttyRuntime
   @State private var tabManager: TerminalTabManager
+  @State private var projectStore: ProjectStore
 
   @MainActor init() {
     NSWindow.allowsAutomaticWindowTabbing = false
@@ -32,27 +33,32 @@ struct PiDesktopApp: App {
     let manager = TerminalTabManager(runtime: runtime)
     _tabManager = State(initialValue: manager)
 
+    let store = ProjectStore()
+    _projectStore = State(initialValue: store)
+    manager.projectStore = store
   }
 
   var body: some Scene {
     Window("PiDesktop", id: "main") {
       GhosttyColorSchemeSyncView(ghostty: ghostty) {
-        MainContentView(tabManager: tabManager)
+        MainContentView(tabManager: tabManager, projectStore: projectStore)
       }
     }
     .commands {
       CommandGroup(replacing: .newItem) {
         Button("New Shell Tab") {
-          let homeURL = FileManager.default.homeDirectoryForCurrentUser
-          tabManager.createTab(type: .shell, workingDirectory: homeURL)
+          guard let dir = tabManager.selectedWorktreePath else { return }
+          tabManager.createTab(type: .shell, workingDirectory: dir)
         }
         .keyboardShortcut("n", modifiers: [.command, .shift])
+        .disabled(tabManager.selectedWorktreePath == nil)
 
         Button("New Pi Tab") {
-          let homeURL = FileManager.default.homeDirectoryForCurrentUser
-          tabManager.createTab(type: .pi, workingDirectory: homeURL)
+          guard let dir = tabManager.selectedWorktreePath else { return }
+          tabManager.createTab(type: .pi, workingDirectory: dir)
         }
         .keyboardShortcut("n", modifiers: [.command, .control])
+        .disabled(tabManager.selectedWorktreePath == nil)
 
         Divider()
 
@@ -93,17 +99,16 @@ struct PiDesktopApp: App {
 
 private struct MainContentView: View {
   @Bindable var tabManager: TerminalTabManager
+  @Bindable var projectStore: ProjectStore
 
   var body: some View {
-    TerminalDetailView(tabManager: tabManager)
-      .frame(minWidth: 600, minHeight: 400)
-      .onAppear {
-        // Create an initial shell tab if none exist
-        if tabManager.tabs.isEmpty {
-          let homeURL = FileManager.default.homeDirectoryForCurrentUser
-          tabManager.createTab(type: .shell, workingDirectory: homeURL)
-        }
-      }
+    NavigationSplitView {
+      SidebarView(projectStore: projectStore, tabManager: tabManager)
+    } detail: {
+      TerminalDetailView(tabManager: tabManager)
+    }
+    .frame(minWidth: 800, minHeight: 500)
+
   }
 }
 

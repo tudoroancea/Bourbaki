@@ -16,11 +16,18 @@ private final class NotificationDelegate: NSObject, UNUserNotificationCenterDele
 @MainActor
 @Observable
 final class TerminalTabManager {
+  /// All tabs across all worktrees.
   var tabs: [TerminalTab] = []
   var selectedTabID: UUID?
 
+  /// The currently selected worktree path (set by sidebar selection).
+  var selectedWorktreePath: URL?
+
   private let runtime: GhosttyRuntime
   private let notificationDelegate = NotificationDelegate()
+
+  /// Optional reference to project store for updating session status from in-app tabs.
+  var projectStore: ProjectStore?
 
   init(runtime: GhosttyRuntime) {
     self.runtime = runtime
@@ -29,13 +36,44 @@ final class TerminalTabManager {
     center.requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
   }
 
+  /// Tabs for the currently selected worktree only.
+  var visibleTabs: [TerminalTab] {
+    guard let selectedWorktreePath else { return [] }
+    return tabs.filter { $0.worktreePath.standardizedFileURL == selectedWorktreePath.standardizedFileURL }
+  }
+
   var selectedTab: TerminalTab? {
     guard let selectedTabID else { return nil }
-    return tabs.first { $0.id == selectedTabID }
+    return visibleTabs.first { $0.id == selectedTabID }
+  }
+
+  /// Select a worktree. Shows existing tabs, or creates a pi tab if none exist.
+  func selectWorktree(_ path: URL) {
+    let standardized = path.standardizedFileURL
+    selectedWorktreePath = path
+
+    // If the current tab is already in this worktree, keep it
+    if let selectedTabID, let tab = tabs.first(where: { $0.id == selectedTabID }),
+       tab.worktreePath.standardizedFileURL == standardized {
+      return
+    }
+
+    // Try to select an existing tab in this worktree
+    let worktreeTabs = tabs.filter { $0.worktreePath.standardizedFileURL == standardized }
+    if let first = worktreeTabs.first {
+      selectedTabID = first.id
+      return
+    }
+
+    // No tabs for this worktree — open a pi session by default
+    createTab(type: .pi, workingDirectory: path)
   }
 
   @discardableResult
   func createTab(type: TabType, workingDirectory: URL) -> UUID {
+    // Set worktree path and auto-select it
+    selectedWorktreePath = workingDirectory
+
     let initialInput = type.command.map { "\($0)\n" }
     let surfaceView = GhosttySurfaceView(
       runtime: runtime,
@@ -45,6 +83,7 @@ final class TerminalTabManager {
 
     let tab = TerminalTab(
       type: type,
+      worktreePath: workingDirectory,
       title: type.displayName,
       surfaceView: surfaceView
     )
@@ -71,19 +110,15 @@ final class TerminalTabManager {
 
     surfaceView.bridge.onDesktopNotification = { [weak self, weak tab] title, body in
       guard let self, let tab else { return }
-      // Mark tab as having a notification if it's not currently selected
       if self.selectedTabID != tab.id {
         tab.hasNotification = true
       }
-      // Post system notification
       self.postSystemNotification(title: title, body: body)
     }
 
-    // Wire tab navigation from ghostty
     surfaceView.bridge.onNewTab = { [weak self] in
       guard let self else { return false }
-      let dir = workingDirectory
-      self.createTab(type: .shell, workingDirectory: dir)
+      self.createTab(type: .shell, workingDirectory: workingDirectory)
       return true
     }
 
@@ -103,16 +138,21 @@ final class TerminalTabManager {
 
   func closeTab(_ id: UUID) {
     guard let index = tabs.firstIndex(where: { $0.id == id }) else { return }
-    let tab = tabs.remove(at: index)
-    tab.surfaceView.closeSurface()
+    let closedTab = tabs.remove(at: index)
+    closedTab.surfaceView.closeSurface()
 
     if selectedTabID == id {
-      // Select the nearest tab
-      if tabs.isEmpty {
+      // Select the nearest visible tab
+      let visible = visibleTabs
+      if visible.isEmpty {
         selectedTabID = nil
+        // Clear worktree selection when no more tabs remain for it
+        if let wp = selectedWorktreePath,
+           !tabs.contains(where: { $0.worktreePath.standardizedFileURL == wp.standardizedFileURL }) {
+          selectedWorktreePath = nil
+        }
       } else {
-        let newIndex = min(index, tabs.count - 1)
-        selectedTabID = tabs[newIndex].id
+        selectedTabID = visible.first?.id
       }
     }
   }
@@ -124,26 +164,41 @@ final class TerminalTabManager {
   }
 
   func selectNextTab() {
+    let visible = visibleTabs
     guard let currentID = selectedTabID,
-          let currentIndex = tabs.firstIndex(where: { $0.id == currentID }),
-          !tabs.isEmpty
+          let currentIndex = visible.firstIndex(where: { $0.id == currentID }),
+          !visible.isEmpty
     else { return }
-    let nextIndex = (currentIndex + 1) % tabs.count
-    selectTab(tabs[nextIndex].id)
+    let nextIndex = (currentIndex + 1) % visible.count
+    selectTab(visible[nextIndex].id)
   }
 
   func selectPreviousTab() {
+    let visible = visibleTabs
     guard let currentID = selectedTabID,
-          let currentIndex = tabs.firstIndex(where: { $0.id == currentID }),
-          !tabs.isEmpty
+          let currentIndex = visible.firstIndex(where: { $0.id == currentID }),
+          !visible.isEmpty
     else { return }
-    let prevIndex = (currentIndex - 1 + tabs.count) % tabs.count
-    selectTab(tabs[prevIndex].id)
+    let prevIndex = (currentIndex - 1 + visible.count) % visible.count
+    selectTab(visible[prevIndex].id)
   }
 
   func selectTabByIndex(_ index: Int) {
-    guard index >= 0, index < tabs.count else { return }
-    selectTab(tabs[index].id)
+    let visible = visibleTabs
+    guard index >= 0, index < visible.count else { return }
+    selectTab(visible[index].id)
+  }
+
+  /// Check if there's an active pi tab running in the given worktree.
+  func sessionStatus(for worktreePath: URL) -> SessionStatus {
+    let worktreeTabs = tabs.filter {
+      $0.type == .pi && $0.worktreePath.standardizedFileURL == worktreePath.standardizedFileURL
+    }
+    guard !worktreeTabs.isEmpty else { return .stopped }
+    if worktreeTabs.contains(where: { $0.isRunning }) {
+      return .running
+    }
+    return .idle
   }
 
   // MARK: - Private
@@ -157,12 +212,12 @@ final class TerminalTabManager {
       selectNextTab()
       return true
     case GHOSTTY_GOTO_TAB_LAST:
-      if let last = tabs.last {
+      let visible = visibleTabs
+      if let last = visible.last {
         selectTab(last.id)
       }
       return true
     default:
-      // Numeric tab indices (raw value is 1-based tab number for positive values)
       let rawValue = Int(gotoTab.rawValue)
       if rawValue >= 0 {
         selectTabByIndex(rawValue)
