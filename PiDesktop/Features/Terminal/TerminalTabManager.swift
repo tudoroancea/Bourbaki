@@ -36,6 +36,11 @@ final class TerminalTabManager {
     center.requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
   }
 
+  /// Whether any tabs are currently open across all worktrees.
+  var hasRunningTerminals: Bool {
+    !tabs.isEmpty
+  }
+
   /// Tabs for the currently selected worktree only.
   var visibleTabs: [TerminalTab] {
     guard let selectedWorktreePath else { return [] }

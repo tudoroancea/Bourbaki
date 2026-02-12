@@ -2,6 +2,29 @@ import AppKit
 import GhosttyKit
 import SwiftUI
 
+// MARK: - App Delegate (Cmd+Q confirmation)
+
+final class AppDelegate: NSObject, NSApplicationDelegate {
+  /// Set by the SwiftUI app so the delegate can check terminal state.
+  var tabManager: TerminalTabManager?
+
+  func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+    guard let tabManager, tabManager.hasRunningTerminals else {
+      return .terminateNow
+    }
+
+    let alert = NSAlert()
+    alert.messageText = "Quit PiDesktop?"
+    alert.informativeText = "You still have terminals running. Are you sure you want to quit?"
+    alert.alertStyle = .warning
+    alert.addButton(withTitle: "Quit")
+    alert.addButton(withTitle: "Cancel")
+
+    let response = alert.runModal()
+    return response == .alertFirstButtonReturn ? .terminateNow : .terminateCancel
+  }
+}
+
 /// Builds the argv array for ghostty_init, including unbind args for all app shortcuts.
 private enum GhosttyCLI {
   static let argv: [UnsafeMutablePointer<CChar>?] = {
@@ -19,6 +42,7 @@ private enum GhosttyCLI {
 @main
 @MainActor
 struct PiDesktopApp: App {
+  @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
   @State private var ghostty: GhosttyRuntime
   @State private var tabManager: TerminalTabManager
   @State private var projectStore: ProjectStore
@@ -49,6 +73,9 @@ struct PiDesktopApp: App {
     let store = ProjectStore()
     _projectStore = State(initialValue: store)
     manager.projectStore = store
+
+    // Wire tab manager to app delegate for quit/close confirmation
+    appDelegate.tabManager = manager
   }
 
   var body: some Scene {
@@ -124,7 +151,7 @@ struct PiDesktopApp: App {
         .disabled(tabManager.selectedTabID == nil)
 
         Button("Close Window") {
-          NSApplication.shared.keyWindow?.close()
+          NSApp.terminate(nil)
         }
         .keyboardShortcut(
           AppShortcuts.closeWindow.keyEquivalent,
