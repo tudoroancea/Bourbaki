@@ -74,7 +74,6 @@ struct TerminalDetailView: View {
     }
   }
 
-
 }
 
 // MARK: - Window Title Updater
@@ -102,8 +101,8 @@ private struct WindowTitleUpdater: NSViewRepresentable {
 
   private func applyTitleFont(to window: NSWindow?) {
     guard let window,
-          let titleFont = NSFont(name: "JetBrainsMonoNF-Medium", size: 13),
-          let titlebarView = window.standardWindowButton(.closeButton)?.superview?.superview
+      let titleFont = NSFont(name: "JetBrainsMonoNF-Medium", size: 13),
+      let titlebarView = window.standardWindowButton(.closeButton)?.superview?.superview
     else { return }
     applyFont(titleFont, in: titlebarView)
   }

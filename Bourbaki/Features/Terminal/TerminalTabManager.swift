@@ -72,7 +72,8 @@ final class TerminalTabManager {
 
     // If the current tab is already in this worktree, keep it
     if let selectedTabID, let tab = tabs.first(where: { $0.id == selectedTabID }),
-       tab.worktreePath.standardizedFileURL == standardized {
+      tab.worktreePath.standardizedFileURL == standardized
+    {
       return
     }
 
@@ -111,7 +112,8 @@ final class TerminalTabManager {
     // Check tool availability before creating a tool tab
     if type != .shell, let settings = toolSettings, !settings.isAvailable(type) {
       let exe = settings.executableName(for: type) ?? type.displayName
-      toolErrorMessage = "Cannot open \(type.displayName): '\(exe)' was not found in your PATH.\n\nYou can configure the command in Settings (⌘,)."
+      toolErrorMessage =
+        "Cannot open \(type.displayName): '\(exe)' was not found in your PATH.\n\nYou can configure the command in Settings (⌘,)."
       showToolError = true
       // Return a dummy ID — no tab is created
       return UUID()
@@ -195,7 +197,8 @@ final class TerminalTabManager {
         selectedTabID = nil
         // Clear worktree selection when no more tabs remain for it
         if let wp = selectedWorktreePath,
-           !tabs.contains(where: { $0.worktreePath.standardizedFileURL == wp.standardizedFileURL }) {
+          !tabs.contains(where: { $0.worktreePath.standardizedFileURL == wp.standardizedFileURL })
+        {
           selectedWorktreePath = nil
         }
       } else {
@@ -213,8 +216,8 @@ final class TerminalTabManager {
   func selectNextTab() {
     let visible = visibleTabs
     guard let currentID = selectedTabID,
-          let currentIndex = visible.firstIndex(where: { $0.id == currentID }),
-          !visible.isEmpty
+      let currentIndex = visible.firstIndex(where: { $0.id == currentID }),
+      !visible.isEmpty
     else { return }
     let nextIndex = (currentIndex + 1) % visible.count
     selectTab(visible[nextIndex].id)
@@ -223,8 +226,8 @@ final class TerminalTabManager {
   func selectPreviousTab() {
     let visible = visibleTabs
     guard let currentID = selectedTabID,
-          let currentIndex = visible.firstIndex(where: { $0.id == currentID }),
-          !visible.isEmpty
+      let currentIndex = visible.firstIndex(where: { $0.id == currentID }),
+      !visible.isEmpty
     else { return }
     let prevIndex = (currentIndex - 1 + visible.count) % visible.count
     selectTab(visible[prevIndex].id)
@@ -250,7 +253,8 @@ final class TerminalTabManager {
     // Return in sidebar order (projects → worktrees)
     var result: [URL] = []
     for project in store.projects {
-      let paths = project.worktrees.isEmpty
+      let paths =
+        project.worktrees.isEmpty
         ? [project.rootPath]
         : project.worktrees.map(\.path)
       for path in paths where activePaths.contains(path.standardizedFileURL) {

@@ -103,8 +103,7 @@ struct ProjectSectionView: View {
     let isSelected = tabManager.selectedWorktreePath?.standardizedFileURL == path.standardizedFileURL
     let status = tabManager.sessionStatus(for: path)
 
-    let isMain = worktree == nil ||
-      worktree!.path.standardizedFileURL == project.rootPath.standardizedFileURL
+    let isMain = worktree == nil || worktree!.path.standardizedFileURL == project.rootPath.standardizedFileURL
     let canDelete = worktree != nil && !isMain
 
     return HoverableWorktreeRow(

@@ -71,7 +71,8 @@ struct CreateWorktreeView: View {
       branches = await GitService.listBranches(for: projectRootPath)
       if let first = branches.first {
         // Default to main/master if available, otherwise first
-        selectedBranch = branches.first(where: { $0 == "main" })
+        selectedBranch =
+          branches.first(where: { $0 == "main" })
           ?? branches.first(where: { $0 == "master" })
           ?? first
       }

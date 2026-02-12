@@ -60,7 +60,7 @@ struct BourbakiApp: App {
 
     // Initialize ghostty with unbind args for app-level keybindings
     GhosttyCLI.argv.withUnsafeBufferPointer { buffer in
-      let argc = UInt(max(0, buffer.count - 1)) // exclude nil terminator
+      let argc = UInt(max(0, buffer.count - 1))  // exclude nil terminator
       let ptr = UnsafeMutablePointer(mutating: buffer.baseAddress)
       if ghostty_init(argc, ptr) != GHOSTTY_SUCCESS {
         preconditionFailure("ghostty_init failed")
@@ -95,7 +95,8 @@ struct BourbakiApp: App {
   var body: some Scene {
     Window("Bourbaki", id: "main") {
       GhosttyColorSchemeSyncView(ghostty: ghostty) {
-        MainContentView(tabManager: tabManager, projectStore: projectStore, recentStore: recentStore, toolSettings: toolSettings)
+        MainContentView(
+          tabManager: tabManager, projectStore: projectStore, recentStore: recentStore, toolSettings: toolSettings)
       }
     }
     Settings {
@@ -273,7 +274,8 @@ private struct MainContentView: View {
       SidebarView(projectStore: projectStore, tabManager: tabManager)
         .background(RosePine.surface)
     } detail: {
-      TerminalDetailView(tabManager: tabManager, projectStore: projectStore, recentStore: recentStore, toolSettings: toolSettings)
+      TerminalDetailView(
+        tabManager: tabManager, projectStore: projectStore, recentStore: recentStore, toolSettings: toolSettings)
     }
     .frame(minWidth: 800, minHeight: 500)
     .rosePineWindow()

@@ -51,7 +51,8 @@ enum GitService {
     guard let output = await runGit(["branch", "--format=%(refname:short)"], in: rootPath) else {
       return []
     }
-    return output
+    return
+      output
       .components(separatedBy: "\n")
       .map { $0.trimmingCharacters(in: .whitespaces) }
       .filter { !$0.isEmpty }
@@ -79,7 +80,7 @@ enum GitService {
       args += [worktreePath.path, baseBranch]
     }
 
-    guard let _ = await runGit(args, in: rootPath) else {
+    guard await runGit(args, in: rootPath) != nil else {
       return .failure(.commandFailed("Failed to create worktree '\(worktreeName)'"))
     }
     return .success(())
@@ -110,8 +111,7 @@ enum GitService {
         for block in blocks {
           let lines = block.components(separatedBy: "\n")
           let matchesPath = lines.contains { line in
-            line.hasPrefix("worktree ") &&
-            String(line.dropFirst("worktree ".count)) == worktreePath.path
+            line.hasPrefix("worktree ") && String(line.dropFirst("worktree ".count)) == worktreePath.path
           }
           if matchesPath {
             for line in lines where line.hasPrefix("branch ") {
@@ -128,14 +128,14 @@ enum GitService {
     if force { args.append("--force") }
     args.append(worktreePath.path)
 
-    guard let _ = await runGit(args, in: rootPath) else {
+    guard await runGit(args, in: rootPath) != nil else {
       return .failure(.commandFailed("Failed to remove worktree at '\(worktreePath.path)'"))
     }
 
     // Delete branch if requested
     if let branch = branchToDelete {
       let branchArgs = ["branch", "-D", branch]
-      let _ = await runGit(branchArgs, in: rootPath)
+      _ = await runGit(branchArgs, in: rootPath)
       // Ignore branch deletion failure (e.g. if it's the main branch)
     }
 

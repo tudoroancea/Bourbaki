@@ -6,17 +6,18 @@ import SwiftUI
 struct RosePineWindowStyle: ViewModifier {
   func body(content: Content) -> some View {
     content
-      .background(WindowAccessor { window in
-        guard let window else { return }
-        window.titlebarAppearsTransparent = true
-        window.backgroundColor = RosePine.nsBase
-        window.titleVisibility = .visible
-        // Use full-size content view so sidebar + detail fill behind titlebar
-        window.styleMask.insert(.fullSizeContentView)
+      .background(
+        WindowAccessor { window in
+          guard let window else { return }
+          window.titlebarAppearsTransparent = true
+          window.backgroundColor = RosePine.nsBase
+          window.titleVisibility = .visible
+          // Use full-size content view so sidebar + detail fill behind titlebar
+          window.styleMask.insert(.fullSizeContentView)
 
-        // Apply JetBrains Mono to the window title
-        applyTitleFont(to: window)
-      })
+          // Apply JetBrains Mono to the window title
+          applyTitleFont(to: window)
+        })
   }
 
   private func applyTitleFont(to window: NSWindow) {

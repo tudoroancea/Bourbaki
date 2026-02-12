@@ -40,7 +40,7 @@ struct WorktreeRowView: View {
       Spacer()
 
       // Diff stats
-      if let added = addedLines, let removed = removedLines, (added > 0 || removed > 0) {
+      if let added = addedLines, let removed = removedLines, added > 0 || removed > 0 {
         HStack(spacing: 4) {
           if added > 0 {
             Text("+\(added)")

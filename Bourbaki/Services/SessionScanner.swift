@@ -16,15 +16,18 @@ enum SessionScanner {
 
     var sessions: [PiSession] = []
     for dir in sessionDirs {
-      guard let contents = try? fm.contentsOfDirectory(
-        at: dir,
-        includingPropertiesForKeys: [.contentModificationDateKey],
-        options: [.skipsHiddenFiles]
-      ) else { continue }
+      guard
+        let contents = try? fm.contentsOfDirectory(
+          at: dir,
+          includingPropertiesForKeys: [.contentModificationDateKey],
+          options: [.skipsHiddenFiles]
+        )
+      else { continue }
 
       for fileURL in contents where fileURL.pathExtension == "jsonl" {
         let name = fileURL.deletingPathExtension().lastPathComponent
-        let modified = (try? fileURL.resourceValues(forKeys: [.contentModificationDateKey]))?.contentModificationDate ?? .distantPast
+        let modified =
+          (try? fileURL.resourceValues(forKeys: [.contentModificationDateKey]))?.contentModificationDate ?? .distantPast
         sessions.append(PiSession(id: name, path: fileURL, lastModified: modified))
       }
     }
@@ -46,11 +49,13 @@ enum SessionScanner {
 
     guard fm.fileExists(atPath: basePath.path) else { return [] }
 
-    guard let contents = try? fm.contentsOfDirectory(
-      at: basePath,
-      includingPropertiesForKeys: [.isDirectoryKey],
-      options: [.skipsHiddenFiles]
-    ) else { return [] }
+    guard
+      let contents = try? fm.contentsOfDirectory(
+        at: basePath,
+        includingPropertiesForKeys: [.isDirectoryKey],
+        options: [.skipsHiddenFiles]
+      )
+    else { return [] }
 
     let worktreeAbsPath = worktreePath.standardizedFileURL.path
 

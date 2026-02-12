@@ -33,11 +33,13 @@ struct SidebarView: View {
             draggingProjectID = project.id
             return NSItemProvider(object: project.id.uuidString as NSString)
           }
-          .onDrop(of: [.text], delegate: ProjectDropDelegate(
-            targetProjectID: project.id,
-            projectStore: projectStore,
-            draggingProjectID: $draggingProjectID
-          ))
+          .onDrop(
+            of: [.text],
+            delegate: ProjectDropDelegate(
+              targetProjectID: project.id,
+              projectStore: projectStore,
+              draggingProjectID: $draggingProjectID
+            ))
         }
       }
       .padding(.horizontal, 8)
@@ -116,7 +118,7 @@ private struct ProjectDropDelegate: DropDelegate {
   func dropEntered(info: DropInfo) {
     guard let dragging = draggingProjectID, dragging != targetProjectID else { return }
     guard let sourceIndex = projectStore.projects.firstIndex(where: { $0.id == dragging }),
-          let destinationIndex = projectStore.projects.firstIndex(where: { $0.id == targetProjectID })
+      let destinationIndex = projectStore.projects.firstIndex(where: { $0.id == targetProjectID })
     else { return }
 
     withAnimation(.easeInOut(duration: 0.2)) {

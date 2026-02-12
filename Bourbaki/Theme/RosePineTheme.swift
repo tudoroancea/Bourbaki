@@ -108,22 +108,23 @@ enum RosePine {
   /// NSColor for the window/titlebar background
   static let nsBase = NSColor(name: nil) { appearance in
     appearance.isDark
-      ? NSColor(red: 0x19/255.0, green: 0x17/255.0, blue: 0x24/255.0, alpha: 1)
-      : NSColor(red: 0xfa/255.0, green: 0xf4/255.0, blue: 0xed/255.0, alpha: 1)
+      ? NSColor(red: 0x19 / 255.0, green: 0x17 / 255.0, blue: 0x24 / 255.0, alpha: 1)
+      : NSColor(red: 0xfa / 255.0, green: 0xf4 / 255.0, blue: 0xed / 255.0, alpha: 1)
   }
 
   static let nsSurface = NSColor(name: nil) { appearance in
     appearance.isDark
-      ? NSColor(red: 0x1f/255.0, green: 0x1d/255.0, blue: 0x2e/255.0, alpha: 1)
-      : NSColor(red: 0xff/255.0, green: 0xfa/255.0, blue: 0xf3/255.0, alpha: 1)
+      ? NSColor(red: 0x1f / 255.0, green: 0x1d / 255.0, blue: 0x2e / 255.0, alpha: 1)
+      : NSColor(red: 0xff / 255.0, green: 0xfa / 255.0, blue: 0xf3 / 255.0, alpha: 1)
   }
 
   // MARK: - Helpers
 
   private static func adaptive(dark: Color, light: Color) -> Color {
-    Color(nsColor: NSColor(name: nil) { appearance in
-      appearance.isDark ? NSColor(dark) : NSColor(light)
-    })
+    Color(
+      nsColor: NSColor(name: nil) { appearance in
+        appearance.isDark ? NSColor(dark) : NSColor(light)
+      })
   }
 }
 
