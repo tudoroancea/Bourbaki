@@ -106,23 +106,15 @@ struct ProjectSectionView: View {
     let canDelete = worktree != nil &&
       worktree!.path.standardizedFileURL != project.rootPath.standardizedFileURL
 
-    return WorktreeRowView(
+    return HoverableWorktreeRow(
       name: name,
       addedLines: worktree?.addedLines,
       removedLines: worktree?.removedLines,
       sessionStatus: status,
-      onDelete: canDelete ? { worktreeToDelete = worktree } : nil
+      isSelected: isSelected,
+      onDelete: canDelete ? { worktreeToDelete = worktree } : nil,
+      onSelect: { tabManager.selectWorktree(path) }
     )
-    .padding(.horizontal, 8)
-    .padding(.vertical, 4)
-    .background(
-      RoundedRectangle(cornerRadius: 8)
-        .fill(isSelected ? RosePine.sidebarSelected : Color.clear)
-    )
-    .contentShape(RoundedRectangle(cornerRadius: 8))
-    .onTapGesture {
-      tabManager.selectWorktree(path)
-    }
     .contextMenu {
       Button("Open Pi Session") {
         tabManager.createTab(type: .pi, workingDirectory: path)
@@ -146,6 +138,48 @@ struct ProjectSectionView: View {
           worktreeToDelete = worktree
         }
       }
+    }
+  }
+}
+
+// MARK: - Hoverable Worktree Row Wrapper
+
+private struct HoverableWorktreeRow: View {
+  let name: String
+  let addedLines: Int?
+  let removedLines: Int?
+  let sessionStatus: SessionStatus
+  let isSelected: Bool
+  var onDelete: (() -> Void)?
+  var onSelect: () -> Void
+
+  @State private var isHovering = false
+
+  var body: some View {
+    WorktreeRowView(
+      name: name,
+      addedLines: addedLines,
+      removedLines: removedLines,
+      sessionStatus: sessionStatus,
+      onDelete: onDelete
+    )
+    .padding(.horizontal, 8)
+    .padding(.vertical, 4)
+    .background(
+      RoundedRectangle(cornerRadius: 8)
+        .fill(isSelected ? RosePine.sidebarSelected : Color.clear)
+    )
+    .overlay(
+      RoundedRectangle(cornerRadius: 8)
+        .strokeBorder(RosePine.highlightMed, lineWidth: 1)
+        .opacity(isHovering && !isSelected ? 1 : 0)
+    )
+    .contentShape(RoundedRectangle(cornerRadius: 8))
+    .onHover { hovering in
+      isHovering = hovering
+    }
+    .onTapGesture {
+      onSelect()
     }
   }
 }

@@ -9,41 +9,40 @@ struct SidebarView: View {
   @State private var draggingProjectID: UUID?
 
   var body: some View {
-    List {
-      ForEach(filteredProjects) { project in
-        ProjectSectionView(
-          project: project,
-          tabManager: tabManager,
-          isExpanded: Binding(
-            get: { !collapsedProjects.contains(project.id) },
-            set: { newValue in
-              if newValue {
-                collapsedProjects.remove(project.id)
-              } else {
-                collapsedProjects.insert(project.id)
+    ScrollView {
+      LazyVStack(spacing: 4) {
+        ForEach(filteredProjects) { project in
+          ProjectSectionView(
+            project: project,
+            tabManager: tabManager,
+            isExpanded: Binding(
+              get: { !collapsedProjects.contains(project.id) },
+              set: { newValue in
+                if newValue {
+                  collapsedProjects.remove(project.id)
+                } else {
+                  collapsedProjects.insert(project.id)
+                }
               }
-            }
-          ),
-          onRemove: { projectStore.removeProject(project.id) },
-          onRefresh: { await projectStore.refresh() }
-        )
-        .listRowSeparator(.hidden)
-        .listRowInsets(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 1))
-        .listRowBackground(Color.clear)
-        .opacity(draggingProjectID == project.id ? 0 : 1)
-        .onDrag {
-          draggingProjectID = project.id
-          return NSItemProvider(object: project.id.uuidString as NSString)
+            ),
+            onRemove: { projectStore.removeProject(project.id) },
+            onRefresh: { await projectStore.refresh() }
+          )
+          .opacity(draggingProjectID == project.id ? 0 : 1)
+          .onDrag {
+            draggingProjectID = project.id
+            return NSItemProvider(object: project.id.uuidString as NSString)
+          }
+          .onDrop(of: [.text], delegate: ProjectDropDelegate(
+            targetProjectID: project.id,
+            projectStore: projectStore,
+            draggingProjectID: $draggingProjectID
+          ))
         }
-        .onDrop(of: [.text], delegate: ProjectDropDelegate(
-          targetProjectID: project.id,
-          projectStore: projectStore,
-          draggingProjectID: $draggingProjectID
-        ))
       }
+      .padding(.horizontal, 8)
+      .padding(.top, 8)
     }
-    .listStyle(.sidebar)
-    .scrollContentBackground(.hidden)
     .background(RosePine.surface)
     .navigationTitle("Projects")
     .safeAreaInset(edge: .bottom) {
