@@ -163,6 +163,18 @@ struct PiDesktopApp: App {
         Divider()
 
         ForEach(0..<9, id: \.self) { index in
+          Button("Worktree \(index + 1)") {
+            tabManager.selectWorktreeByIndex(index)
+          }
+          .keyboardShortcut(
+            KeyEquivalent(Character(String(index + 1))),
+            modifiers: [.command]
+          )
+        }
+
+        Divider()
+
+        ForEach(0..<9, id: \.self) { index in
           Button("Tab \(index + 1)") {
             tabManager.selectTabByIndex(index)
           }

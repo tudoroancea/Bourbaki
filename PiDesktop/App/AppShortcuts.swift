@@ -60,6 +60,17 @@ enum AppShortcuts {
   static let toggleSidebar = AppShortcut(key: "b", modifiers: [.command])
   static let focusSidebar = AppShortcut(key: "0", modifiers: [.command, .control])
 
+  // Worktree switching (Cmd+1-9)
+  static let selectWorktree1 = AppShortcut(key: "1", modifiers: [.command])
+  static let selectWorktree2 = AppShortcut(key: "2", modifiers: [.command])
+  static let selectWorktree3 = AppShortcut(key: "3", modifiers: [.command])
+  static let selectWorktree4 = AppShortcut(key: "4", modifiers: [.command])
+  static let selectWorktree5 = AppShortcut(key: "5", modifiers: [.command])
+  static let selectWorktree6 = AppShortcut(key: "6", modifiers: [.command])
+  static let selectWorktree7 = AppShortcut(key: "7", modifiers: [.command])
+  static let selectWorktree8 = AppShortcut(key: "8", modifiers: [.command])
+  static let selectWorktree9 = AppShortcut(key: "9", modifiers: [.command])
+
   // Tab switching (Cmd+Ctrl+1-9)
   static let selectTab1 = AppShortcut(key: "1", modifiers: [.command, .control])
   static let selectTab2 = AppShortcut(key: "2", modifiers: [.command, .control])
@@ -84,6 +95,15 @@ enum AppShortcuts {
     previousTab,
     toggleSidebar,
     focusSidebar,
+    selectWorktree1,
+    selectWorktree2,
+    selectWorktree3,
+    selectWorktree4,
+    selectWorktree5,
+    selectWorktree6,
+    selectWorktree7,
+    selectWorktree8,
+    selectWorktree9,
     selectTab1,
     selectTab2,
     selectTab3,

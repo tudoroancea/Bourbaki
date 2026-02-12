@@ -189,6 +189,37 @@ final class TerminalTabManager {
     selectTab(visible[index].id)
   }
 
+  /// Worktree paths that have open tabs, in the order they appear in the sidebar.
+  var activeWorktreePaths: [URL] {
+    let activePaths = Set(tabs.map { $0.worktreePath.standardizedFileURL })
+    guard let store = projectStore else {
+      // Fallback: unique paths in tab order
+      var seen = Set<URL>()
+      return tabs.compactMap { tab in
+        let std = tab.worktreePath.standardizedFileURL
+        return seen.insert(std).inserted ? tab.worktreePath : nil
+      }
+    }
+    // Return in sidebar order (projects → worktrees)
+    var result: [URL] = []
+    for project in store.projects {
+      let paths = project.worktrees.isEmpty
+        ? [project.rootPath]
+        : project.worktrees.map(\.path)
+      for path in paths where activePaths.contains(path.standardizedFileURL) {
+        result.append(path)
+      }
+    }
+    return result
+  }
+
+  /// Select an active worktree by its index among worktrees that have open tabs.
+  func selectWorktreeByIndex(_ index: Int) {
+    let paths = activeWorktreePaths
+    guard index >= 0, index < paths.count else { return }
+    selectWorktree(paths[index])
+  }
+
   /// Check if there's an active pi tab running in the given worktree.
   func sessionStatus(for worktreePath: URL) -> SessionStatus {
     let allWorktreeTabs = tabs.filter {

@@ -82,7 +82,7 @@ All app-level keybindings use `Cmd+Ctrl` or `Cmd+Shift` combos to avoid collisio
 - [x] Make the tab bar more native (closer to Ghostty's tab bar style)
 - [x] Show active worktree name/path in the title bar (next to "PiDesktop")
 - [ ] Pinned worktrees
-- [ ] Keybindings to switch between active worktrees
+- [x] Keybindings to switch between active worktrees
 - [ ] Periodically reload the worktree list and git diff stats in the background
 - [ ] Worktree management: create and delete worktrees (from existing branch, or with new branch)
 
