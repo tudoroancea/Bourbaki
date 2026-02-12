@@ -5,6 +5,7 @@ import SwiftUI
 /// Displays recently opened worktrees with keyboard shortcuts to quickly reopen them.
 struct DashboardView: View {
   @Bindable var recentStore: RecentWorktreeStore
+  var toolSettings: ToolSettings?
   let onSelectWorktree: (URL) -> Void
 
   var body: some View {
@@ -42,10 +43,53 @@ struct DashboardView: View {
         .frame(maxWidth: 500)
 
         Spacer()
+
+        // Tool availability warnings
+        if let settings = toolSettings, !settings.unavailableTools.isEmpty {
+          toolWarningBanner(settings: settings)
+            .padding(.bottom, 16)
+            .padding(.horizontal, 24)
+        }
       }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(RosePine.base)
+  }
+
+  private func toolWarningBanner(settings: ToolSettings) -> some View {
+    VStack(alignment: .leading, spacing: 6) {
+      HStack(spacing: 6) {
+        Image(systemName: "exclamationmark.triangle.fill")
+          .foregroundStyle(RosePine.gold)
+        Text("Some tools are not available")
+          .font(.jetBrainsMono(size: 13, weight: .semibold))
+          .foregroundStyle(RosePine.text)
+      }
+      ForEach(settings.unavailableTools, id: \.type) { tool in
+        HStack(spacing: 6) {
+          Image(systemName: tool.type.iconName)
+            .frame(width: 16)
+            .foregroundStyle(RosePine.muted)
+          Text("\(tool.type.displayName): \(tool.error)")
+            .font(.jetBrainsMono(size: 12))
+            .foregroundStyle(RosePine.subtle)
+        }
+      }
+      Text("Configure commands in Settings (⌘,)")
+        .font(.jetBrainsMono(size: 11))
+        .foregroundStyle(RosePine.muted)
+        .padding(.top, 2)
+    }
+    .padding(12)
+    .frame(maxWidth: 500, alignment: .leading)
+    .background(
+      RoundedRectangle(cornerRadius: 8)
+        .fill(RosePine.highlightLow)
+        .overlay(
+          RoundedRectangle(cornerRadius: 8)
+            .strokeBorder(RosePine.gold.opacity(0.3), lineWidth: 1)
+        )
+    )
   }
 
   private var emptyState: some View {

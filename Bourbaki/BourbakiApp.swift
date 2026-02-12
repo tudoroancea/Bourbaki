@@ -47,6 +47,7 @@ struct BourbakiApp: App {
   @State private var tabManager: TerminalTabManager
   @State private var projectStore: ProjectStore
   @State private var recentStore: RecentWorktreeStore
+  @State private var toolSettings: ToolSettings
 
   @MainActor init() {
     NSWindow.allowsAutomaticWindowTabbing = false
@@ -80,6 +81,13 @@ struct BourbakiApp: App {
     _recentStore = State(initialValue: recent)
     manager.recentWorktreeStore = recent
 
+    let settings = ToolSettings()
+    _toolSettings = State(initialValue: settings)
+    manager.toolSettings = settings
+
+    // Check tool availability at startup
+    settings.checkToolAvailability()
+
     // Wire tab manager to app delegate for quit/close confirmation
     appDelegate.tabManager = manager
   }
@@ -87,8 +95,11 @@ struct BourbakiApp: App {
   var body: some Scene {
     Window("Bourbaki", id: "main") {
       GhosttyColorSchemeSyncView(ghostty: ghostty) {
-        MainContentView(tabManager: tabManager, projectStore: projectStore, recentStore: recentStore)
+        MainContentView(tabManager: tabManager, projectStore: projectStore, recentStore: recentStore, toolSettings: toolSettings)
       }
+    }
+    Settings {
+      SettingsView(toolSettings: toolSettings)
     }
     .commands {
       // MARK: - File Menu (replacing New Item)
@@ -255,13 +266,14 @@ private struct MainContentView: View {
   @Bindable var tabManager: TerminalTabManager
   @Bindable var projectStore: ProjectStore
   @Bindable var recentStore: RecentWorktreeStore
+  var toolSettings: ToolSettings
 
   var body: some View {
     NavigationSplitView {
       SidebarView(projectStore: projectStore, tabManager: tabManager)
         .background(RosePine.surface)
     } detail: {
-      TerminalDetailView(tabManager: tabManager, projectStore: projectStore, recentStore: recentStore)
+      TerminalDetailView(tabManager: tabManager, projectStore: projectStore, recentStore: recentStore, toolSettings: toolSettings)
     }
     .frame(minWidth: 800, minHeight: 500)
     .rosePineWindow()

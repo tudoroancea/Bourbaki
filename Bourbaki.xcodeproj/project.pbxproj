@@ -42,6 +42,8 @@
 		BB0009010000000100000003 /* Font+JetBrainsMono.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0009010000000100000003 /* Font+JetBrainsMono.swift */; };
 		BB000A010000000100000001 /* RecentWorktreeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000A010000000100000001 /* RecentWorktreeStore.swift */; };
 		BB000A010000000100000002 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000A010000000100000002 /* DashboardView.swift */; };
+		BB000B010000000100000001 /* ToolSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000B010000000100000001 /* ToolSettings.swift */; };
+		BB000B010000000100000002 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000B010000000100000002 /* SettingsView.swift */; };
 		BC1EE5B4D1588FF3CEDB8DEB /* GhosttySurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D420DAD2051A9F5053A9B96 /* GhosttySurfaceView.swift */; };
 		CC4EBADB549DFA92B407A6B1 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95EA61D5AC541B7A29465FBB /* Carbon.framework */; };
 		E394CE23DF70A5477738B3DD /* terminfo in Resources */ = {isa = PBXBuildFile; fileRef = 9A6348D0DE49F359B61604E2 /* terminfo */; };
@@ -99,6 +101,8 @@
 		AA0009010000000100000003 /* Font+JetBrainsMono.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+JetBrainsMono.swift"; sourceTree = "<group>"; };
 		AA000A010000000100000001 /* RecentWorktreeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentWorktreeStore.swift; sourceTree = "<group>"; };
 		AA000A010000000100000002 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		AA000B010000000100000001 /* ToolSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolSettings.swift; sourceTree = "<group>"; };
+		AA000B010000000100000002 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D7068A01AADFC8F6055F0125 /* GhosttyRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosttyRuntime.swift; sourceTree = "<group>"; };
 		EF97B0A1B10296473E032F2E /* GhosttySplitAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosttySplitAction.swift; sourceTree = "<group>"; };
 		F03062A7CEDF906A0521C0E3 /* GhosttySurfaceState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhosttySurfaceState.swift; sourceTree = "<group>"; };
@@ -186,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				CC000A010000000100000001 /* Dashboard */,
+				CC000B010000000100000001 /* Settings */,
 				CC0004010000000100000003 /* Sidebar */,
 				CC0001010000000100000002 /* Terminal */,
 			);
@@ -198,6 +203,14 @@
 				AA000A010000000100000002 /* DashboardView.swift */,
 			);
 			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		CC000B010000000100000001 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				AA000B010000000100000002 /* SettingsView.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		CC0001010000000100000002 /* Terminal */ = {
@@ -230,6 +243,7 @@
 				AA0004010000000100000009 /* GitService.swift */,
 				AA000401000000010000000A /* SessionScanner.swift */,
 				AA000401000000010000000B /* ProcessMonitor.swift */,
+				AA000B010000000100000001 /* ToolSettings.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -373,6 +387,8 @@
 				BB0009010000000100000003 /* Font+JetBrainsMono.swift in Sources */,
 				BB000A010000000100000001 /* RecentWorktreeStore.swift in Sources */,
 				BB000A010000000100000002 /* DashboardView.swift in Sources */,
+				BB000B010000000100000001 /* ToolSettings.swift in Sources */,
+				BB000B010000000100000002 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

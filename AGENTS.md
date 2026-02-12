@@ -47,6 +47,17 @@ Changes from supacode originals:
 
 All app-level keybindings are defined in `Bourbaki/App/AppShortcuts.swift`. They are **unbound from ghostty** at init time via `--keybind=<bind>=unbind` CLI args passed to `ghostty_init` (same pattern as supacode). The ghostty unbind format uses `ctrl`/`alt`/`shift`/`super` modifiers joined by `+`.
 
+## Settings & Tool Configuration
+
+- **Settings page** opened via `Cmd+,` (native SwiftUI `Settings` scene)
+- `ToolSettings.swift` in Services — persists commands in `UserDefaults` (`toolCommand.agent/git/diff`)
+- Defaults: `pi`, `lazygit`, `lumen diff`
+- At startup, `checkToolAvailability()` runs `which` against an augmented PATH (adds homebrew, .local/bin, cargo, bun, mise shims)
+- `ToolSettings.toolErrors` maps `TabType → error message` for unavailable tools
+- Dashboard shows a warning banner at the bottom when tools are missing
+- Creating a tool tab when the tool is unavailable shows an alert with "Open Settings" button
+- `TabType.command` was removed — commands are now resolved via `ToolSettings.command(for:)`
+
 ## Tool Naming (UI)
 
 Tools are presented in the UI with generic names decoupled from the underlying CLI tools:

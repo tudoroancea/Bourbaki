@@ -23,17 +23,6 @@ enum TabType: String, Codable, Hashable {
     case .shell: return "apple.terminal"
     }
   }
-
-  /// The command to run in the terminal for this tab type.
-  /// Uses `exec` so the shell is replaced by the command — when it exits, the surface closes.
-  var command: String? {
-    switch self {
-    case .agent: return "clear && exec pi"
-    case .git: return "clear && exec lazygit"
-    case .diff: return "clear && exec lumen diff"
-    case .shell: return nil // just opens the default shell
-    }
-  }
 }
 
 @MainActor

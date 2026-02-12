@@ -32,6 +32,13 @@ final class TerminalTabManager {
   /// Optional reference to recent worktree store for recording opens.
   var recentWorktreeStore: RecentWorktreeStore?
 
+  /// Tool settings for resolving commands and checking availability.
+  var toolSettings: ToolSettings?
+
+  /// Error message to show in an alert when a tool is unavailable.
+  var toolErrorMessage: String?
+  var showToolError: Bool = false
+
   init(runtime: GhosttyRuntime) {
     self.runtime = runtime
     let center = UNUserNotificationCenter.current()
@@ -101,10 +108,20 @@ final class TerminalTabManager {
 
   @discardableResult
   func createTab(type: TabType, workingDirectory: URL) -> UUID {
+    // Check tool availability before creating a tool tab
+    if type != .shell, let settings = toolSettings, !settings.isAvailable(type) {
+      let exe = settings.executableName(for: type) ?? type.displayName
+      toolErrorMessage = "Cannot open \(type.displayName): '\(exe)' was not found in your PATH.\n\nYou can configure the command in Settings (⌘,)."
+      showToolError = true
+      // Return a dummy ID — no tab is created
+      return UUID()
+    }
+
     // Set worktree path and auto-select it
     selectedWorktreePath = workingDirectory
 
-    let initialInput = type.command.map { "\($0)\n" }
+    let command = toolSettings?.command(for: type)
+    let initialInput = command.map { "\($0)\n" }
     let surfaceView = GhosttySurfaceView(
       runtime: runtime,
       workingDirectory: workingDirectory,

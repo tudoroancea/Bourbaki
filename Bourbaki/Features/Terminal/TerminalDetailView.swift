@@ -4,6 +4,7 @@ struct TerminalDetailView: View {
   @Bindable var tabManager: TerminalTabManager
   @Bindable var projectStore: ProjectStore
   @Bindable var recentStore: RecentWorktreeStore
+  var toolSettings: ToolSettings?
 
   var body: some View {
     VStack(spacing: 0) {
@@ -18,7 +19,7 @@ struct TerminalDetailView: View {
         } else if tabManager.selectedWorktreePath != nil {
           worktreeEmptyState
         } else {
-          DashboardView(recentStore: recentStore) { url in
+          DashboardView(recentStore: recentStore, toolSettings: toolSettings) { url in
             tabManager.selectWorktree(url)
           }
         }
@@ -27,6 +28,16 @@ struct TerminalDetailView: View {
       .background(RosePine.base)
     }
     .background(WindowTitleUpdater(title: windowTitle))
+    .alert("Tool Not Available", isPresented: $tabManager.showToolError) {
+      Button("Open Settings") {
+        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+      }
+      Button("OK", role: .cancel) {}
+    } message: {
+      if let msg = tabManager.toolErrorMessage {
+        Text(msg)
+      }
+    }
   }
 
   private var windowTitle: String {
