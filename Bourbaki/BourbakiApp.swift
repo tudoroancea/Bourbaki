@@ -213,10 +213,10 @@ struct BourbakiApp: App {
         ForEach(Array(AppShortcuts.tabShortcuts.enumerated()), id: \.offset) { index, shortcut in
           Button("Tab \(index + 1)") {
             if tabManager.selectedWorktreePath == nil {
-              // Dashboard mode: open recent worktree by index
-              let entries = recentStore.entries
-              if index < entries.count, let url = recentStore.url(for: entries[index]) {
-                tabManager.selectWorktree(url)
+              // Dashboard mode: switch to active worktree by index
+              let paths = tabManager.activeWorktreePaths
+              if index < paths.count {
+                tabManager.selectWorktree(paths[index])
               }
             } else {
               tabManager.selectTabByIndex(index)

@@ -77,11 +77,14 @@ Key bindings use `Cmd+Ctrl` and `Cmd+Shift` combos to avoid collisions with both
 ## Dashboard / Recent Worktrees
 
 - `DashboardView` shown in detail pane when no worktree is selected (app startup)
+- **ACTIVE section** (above recents): shows worktrees with open tabs, with session status indicators (same dots as sidebar)
+- **RECENT section**: shows recently opened worktrees with display name, path, relative time
+- `Cmd+1-9` on dashboard selects active worktrees (matches tab switching behavior in the rest of the app)
+- When a worktree is selected, `Cmd+1-9` reverts to normal tab switching behavior
+- Recent entries that are also active show the `⌘N` shortcut badge; inactive recents show no shortcut
 - `RecentWorktreeStore` persists to `~/Library/Application Support/Bourbaki/recent_worktrees.json`
 - Up to 20 recent entries, sorted by last opened
-- `Cmd+1-9` opens recent worktrees from dashboard (reuses tab shortcuts when no worktree active)
-- When a worktree is selected, `Cmd+1-9` reverts to normal tab switching behavior
-- Entries show display name, path, relative time; invalid paths are grayed out with warning icon
+- Invalid paths are grayed out with warning icon
 
 ## Theme
 

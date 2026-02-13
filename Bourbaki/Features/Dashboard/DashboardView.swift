@@ -2,8 +2,9 @@ import AppKit
 import SwiftUI
 
 /// Dashboard shown when no worktree is currently active.
-/// Displays recently opened worktrees with keyboard shortcuts to quickly reopen them.
+/// Displays active worktrees (with status) and recently opened worktrees.
 struct DashboardView: View {
+  @Bindable var tabManager: TerminalTabManager
   @Bindable var recentStore: RecentWorktreeStore
   var toolSettings: ToolSettings?
   let onSelectWorktree: (URL) -> Void
@@ -34,9 +35,13 @@ struct DashboardView: View {
               .foregroundStyle(RosePine.subtle)
           }
 
-          if recentStore.entries.isEmpty {
+          if !activeWorktrees.isEmpty {
+            activeList
+          }
+
+          if recentStore.entries.isEmpty && activeWorktrees.isEmpty {
             emptyState
-          } else {
+          } else if !recentStore.entries.isEmpty {
             recentList
           }
         }
@@ -95,6 +100,45 @@ struct DashboardView: View {
     )
   }
 
+  /// Active worktrees with open tabs, paired with display info from the project store.
+  private var activeWorktrees: [(path: URL, displayName: String, projectName: String, worktreeName: String)] {
+    let paths = tabManager.activeWorktreePaths
+    guard let store = tabManager.projectStore else {
+      return paths.map { url in
+        let name = url.lastPathComponent
+        return (path: url, displayName: name, projectName: name, worktreeName: name)
+      }
+    }
+    return paths.compactMap { url in
+      let std = url.standardizedFileURL
+      for project in store.projects {
+        if let wt = project.worktrees.first(where: { $0.path.standardizedFileURL == std }) {
+          let display = project.name == wt.name ? project.name : "\(project.name) · \(wt.name)"
+          return (path: url, displayName: display, projectName: project.name, worktreeName: wt.name)
+        }
+        if project.rootPath.standardizedFileURL == std {
+          return (path: url, displayName: project.name, projectName: project.name, worktreeName: project.name)
+        }
+      }
+      let name = url.lastPathComponent
+      return (path: url, displayName: name, projectName: name, worktreeName: name)
+    }
+  }
+
+  /// Set of standardized paths for active worktrees (for shortcut matching in recents).
+  private var activeWorktreePathSet: Set<String> {
+    Set(tabManager.activeWorktreePaths.map { $0.standardizedFileURL.path })
+  }
+
+  /// Map from active worktree path → Cmd+N shortcut index (1-based).
+  private var activeWorktreeShortcutIndex: [String: Int] {
+    var map: [String: Int] = [:]
+    for (i, wt) in activeWorktrees.prefix(9).enumerated() {
+      map[wt.path.standardizedFileURL.path] = i + 1
+    }
+    return map
+  }
+
   private var emptyState: some View {
     VStack(spacing: 12) {
       Image(systemName: "clock")
@@ -107,6 +151,27 @@ struct DashboardView: View {
     .padding(.top, 16)
   }
 
+  private var activeList: some View {
+    VStack(alignment: .leading, spacing: 2) {
+      Text("ACTIVE")
+        .font(.jetBrainsMono(size: 11, weight: .semibold))
+        .foregroundStyle(RosePine.muted)
+        .padding(.horizontal, 8)
+        .padding(.bottom, 4)
+
+      ForEach(Array(activeWorktrees.prefix(9).enumerated()), id: \.element.path) { index, wt in
+        ActiveWorktreeRow(
+          displayName: wt.displayName,
+          path: wt.path.path,
+          sessionStatus: tabManager.sessionStatus(for: wt.path),
+          index: index + 1,
+          onSelect: { onSelectWorktree(wt.path) }
+        )
+      }
+    }
+    .padding(.top, 8)
+  }
+
   private var recentList: some View {
     VStack(alignment: .leading, spacing: 2) {
       Text("RECENT")
@@ -115,10 +180,10 @@ struct DashboardView: View {
         .padding(.horizontal, 8)
         .padding(.bottom, 4)
 
-      ForEach(Array(recentStore.entries.prefix(9).enumerated()), id: \.element.id) { index, entry in
+      ForEach(Array(recentStore.entries.prefix(9).enumerated()), id: \.element.id) { _, entry in
         RecentWorktreeRow(
           entry: entry,
-          index: index + 1,
+          shortcutIndex: activeWorktreeShortcutIndex[URL(fileURLWithPath: entry.path).standardizedFileURL.path],
           isValid: recentStore.url(for: entry) != nil,
           onSelect: {
             if let url = recentStore.url(for: entry) {
@@ -132,12 +197,13 @@ struct DashboardView: View {
   }
 }
 
-// MARK: - Row
+// MARK: - Active Worktree Row
 
-private struct RecentWorktreeRow: View {
-  let entry: RecentWorktreeEntry
+private struct ActiveWorktreeRow: View {
+  let displayName: String
+  let path: String
+  let sessionStatus: SessionStatus
   let index: Int
-  let isValid: Bool
   let onSelect: () -> Void
 
   @State private var isHovered = false
@@ -146,14 +212,96 @@ private struct RecentWorktreeRow: View {
     Button(action: onSelect) {
       HStack(spacing: 12) {
         // Shortcut badge
-        Text("\(index)")
-          .font(.jetBrainsMono(size: 12, weight: .semibold))
+        Text("⌘\(index)")
+          .font(.jetBrainsMono(size: 11, weight: .semibold))
           .foregroundStyle(isHovered ? RosePine.base : RosePine.subtle)
-          .frame(width: 24, height: 24)
+          .frame(width: 32, height: 24)
           .background(
             RoundedRectangle(cornerRadius: 4)
               .fill(isHovered ? RosePine.iris : RosePine.highlightMed)
           )
+
+        // Status indicator
+        statusIndicator
+
+        // Info
+        VStack(alignment: .leading, spacing: 2) {
+          Text(displayName)
+            .font(.jetBrainsMono(size: 14, weight: .medium))
+            .foregroundStyle(RosePine.text)
+            .lineLimit(1)
+
+          Text(path)
+            .font(.jetBrainsMono(size: 11))
+            .foregroundStyle(RosePine.muted)
+            .lineLimit(1)
+            .truncationMode(.middle)
+        }
+
+        Spacer()
+      }
+      .padding(.horizontal, 8)
+      .padding(.vertical, 6)
+      .background(
+        RoundedRectangle(cornerRadius: 6)
+          .fill(isHovered ? RosePine.highlightLow : Color.clear)
+      )
+    }
+    .buttonStyle(.plain)
+    .onHover { isHovered = $0 }
+  }
+
+  @ViewBuilder
+  private var statusIndicator: some View {
+    switch sessionStatus {
+    case .running:
+      Circle()
+        .fill(RosePine.statusRunning)
+        .frame(width: 8, height: 8)
+    case .idle:
+      Circle()
+        .fill(RosePine.statusIdle)
+        .frame(width: 8, height: 8)
+    case .terminal:
+      Circle()
+        .fill(RosePine.statusTerminal)
+        .frame(width: 8, height: 8)
+    case .stopped:
+      Circle()
+        .strokeBorder(RosePine.statusStopped, lineWidth: 1)
+        .frame(width: 8, height: 8)
+    }
+  }
+}
+
+// MARK: - Row
+
+private struct RecentWorktreeRow: View {
+  let entry: RecentWorktreeEntry
+  /// If this recent entry is also an active worktree, show its Cmd+N shortcut index (1-based). Nil = no shortcut.
+  let shortcutIndex: Int?
+  let isValid: Bool
+  let onSelect: () -> Void
+
+  @State private var isHovered = false
+
+  var body: some View {
+    Button(action: onSelect) {
+      HStack(spacing: 12) {
+        // Shortcut badge — always reserve the same width for alignment
+        if let idx = shortcutIndex {
+          Text("⌘\(idx)")
+            .font(.jetBrainsMono(size: 11, weight: .semibold))
+            .foregroundStyle(isHovered ? RosePine.base : RosePine.subtle)
+            .frame(width: 32, height: 24)
+            .background(
+              RoundedRectangle(cornerRadius: 4)
+                .fill(isHovered ? RosePine.iris : RosePine.highlightMed)
+            )
+        } else {
+          Color.clear
+            .frame(width: 32, height: 24)
+        }
 
         // Info
         VStack(alignment: .leading, spacing: 2) {

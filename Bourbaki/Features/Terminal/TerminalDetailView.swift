@@ -19,7 +19,7 @@ struct TerminalDetailView: View {
         } else if tabManager.selectedWorktreePath != nil {
           worktreeEmptyState
         } else {
-          DashboardView(recentStore: recentStore, toolSettings: toolSettings) { url in
+          DashboardView(tabManager: tabManager, recentStore: recentStore, toolSettings: toolSettings) { url in
             tabManager.selectWorktree(url)
           }
         }
