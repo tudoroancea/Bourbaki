@@ -1,15 +1,38 @@
+import AppKit
 import Foundation
 import GhosttyKit
 @preconcurrency import UserNotifications
 
-/// Delegate that allows notifications to show even when the app is in the foreground.
+/// Delegate that allows notifications to show even when the app is in the foreground,
+/// and routes notification taps back to the tab manager.
 private final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
+  /// Called when a notification tap occurs. Passes (tabID, worktreePath).
+  var onNotificationTapped: ((UUID, URL) -> Void)?
+
   func userNotificationCenter(
     _ center: UNUserNotificationCenter,
     willPresent notification: UNNotification,
     withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
   ) {
     completionHandler([.banner, .sound])
+  }
+
+  func userNotificationCenter(
+    _ center: UNUserNotificationCenter,
+    didReceive response: UNNotificationResponse,
+    withCompletionHandler completionHandler: @escaping () -> Void
+  ) {
+    let userInfo = response.notification.request.content.userInfo
+    if let tabIDString = userInfo["tabID"] as? String,
+       let tabID = UUID(uuidString: tabIDString),
+       let worktreePathString = userInfo["worktreePath"] as? String
+    {
+      let worktreeURL = URL(fileURLWithPath: worktreePathString)
+      Task { @MainActor in
+        self.onNotificationTapped?(tabID, worktreeURL)
+      }
+    }
+    completionHandler()
   }
 }
 
@@ -47,6 +70,11 @@ final class TerminalTabManager {
     let center = UNUserNotificationCenter.current()
     center.delegate = notificationDelegate
     center.requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
+
+    notificationDelegate.onNotificationTapped = { [weak self] tabID, worktreePath in
+      guard let self else { return }
+      self.focusNotificationSource(tabID: tabID, worktreePath: worktreePath)
+    }
   }
 
   /// Whether any tabs are currently open across all worktrees.
@@ -186,7 +214,7 @@ final class TerminalTabManager {
       if self.selectedTabID != tab.id {
         tab.hasNotification = true
       }
-      self.postSystemNotification(title: title, body: body)
+      self.postSystemNotification(title: title, body: body, tabID: tab.id, worktreePath: tab.worktreePath)
     }
 
     surfaceView.bridge.onNewTab = { [weak self] in
@@ -362,7 +390,19 @@ final class TerminalTabManager {
     }
   }
 
-  private func postSystemNotification(title: String, body: String) {
+  /// Focus the worktree and tab that originated a notification.
+  private func focusNotificationSource(tabID: UUID, worktreePath: URL) {
+    // Bring the app to front
+    NSApplication.shared.activate(ignoringOtherApps: true)
+    // Select the worktree first (this sets up the visible tabs)
+    selectWorktree(worktreePath)
+    // Then select the specific tab
+    if tabs.contains(where: { $0.id == tabID }) {
+      selectTab(tabID)
+    }
+  }
+
+  private func postSystemNotification(title: String, body: String, tabID: UUID, worktreePath: URL) {
     let center = UNUserNotificationCenter.current()
     center.getNotificationSettings { settings in
       guard settings.authorizationStatus == .authorized else {
@@ -376,6 +416,10 @@ final class TerminalTabManager {
       content.title = title
       content.body = body
       content.sound = .default
+      content.userInfo = [
+        "tabID": tabID.uuidString,
+        "worktreePath": worktreePath.path,
+      ]
 
       let request = UNNotificationRequest(
         identifier: UUID().uuidString,
