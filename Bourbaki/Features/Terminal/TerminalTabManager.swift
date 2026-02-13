@@ -65,6 +65,7 @@ final class TerminalTabManager {
   /// Select a worktree. Shows existing tabs, or creates a pi tab if none exist.
   func selectWorktree(_ path: URL) {
     let standardized = path.standardizedFileURL
+    let previousTab = selectedTab
     selectedWorktreePath = path
 
     // Record in recent worktrees
@@ -80,9 +81,17 @@ final class TerminalTabManager {
     // Try to select an existing tab in this worktree
     let worktreeTabs = tabs.filter { $0.worktreePath.standardizedFileURL == standardized }
     if let first = worktreeTabs.first {
+      // Notify the previous tab it lost focus before switching
+      if previousTab?.id != first.id {
+        previousTab?.surfaceView.focusDidChange(false)
+      }
       selectedTabID = first.id
+      first.surfaceView.focusDidChange(true)
       return
     }
+
+    // No tabs for this worktree — notify previous tab before creating a new one
+    previousTab?.surfaceView.focusDidChange(false)
 
     // No tabs for this worktree — open an agent session by default
     createTab(type: .agent, workingDirectory: path)
@@ -209,8 +218,15 @@ final class TerminalTabManager {
 
   func selectTab(_ id: UUID) {
     guard let tab = tabs.first(where: { $0.id == id }) else { return }
+    let previousTab = selectedTab
     selectedTabID = id
     tab.hasNotification = false
+
+    // Propagate focus changes so terminal OSC sequences fire correctly
+    if previousTab?.id != id {
+      previousTab?.surfaceView.focusDidChange(false)
+      tab.surfaceView.focusDidChange(true)
+    }
   }
 
   func selectNextTab() {

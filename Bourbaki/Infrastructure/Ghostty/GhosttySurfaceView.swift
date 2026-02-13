@@ -120,6 +120,7 @@ final class GhosttySurfaceView: NSView, Identifiable {
   }
 
   deinit {
+    NotificationCenter.default.removeObserver(self)
     if let eventMonitor {
       NSEvent.removeMonitor(eventMonitor)
     }
@@ -152,13 +153,42 @@ final class GhosttySurfaceView: NSView, Identifiable {
     super.viewDidMoveToWindow()
     updateContentScale()
     updateSurfaceSize()
+
+    // Remove old window focus observers
+    NotificationCenter.default.removeObserver(self, name: NSWindow.didBecomeKeyNotification, object: nil)
+    NotificationCenter.default.removeObserver(self, name: NSWindow.didResignKeyNotification, object: nil)
+
     // Request keyboard focus when the surface is added to a window
     if let window {
+      // Observe window key status changes to propagate focus OSC sequences
+      NotificationCenter.default.addObserver(
+        self,
+        selector: #selector(windowDidBecomeKey(_:)),
+        name: NSWindow.didBecomeKeyNotification,
+        object: window
+      )
+      NotificationCenter.default.addObserver(
+        self,
+        selector: #selector(windowDidResignKey(_:)),
+        name: NSWindow.didResignKeyNotification,
+        object: window
+      )
       DispatchQueue.main.async { [weak self] in
         guard let self, self.window != nil else { return }
         window.makeFirstResponder(self)
       }
     }
+  }
+
+  @objc private func windowDidBecomeKey(_ notification: Notification) {
+    // Only propagate if this view is the first responder (i.e. the active surface)
+    guard window?.firstResponder == self else { return }
+    focusDidChange(true)
+  }
+
+  @objc private func windowDidResignKey(_ notification: Notification) {
+    guard focused else { return }
+    focusDidChange(false)
   }
 
   override func viewDidChangeBackingProperties() {
