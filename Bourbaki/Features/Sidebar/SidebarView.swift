@@ -88,6 +88,13 @@ struct SidebarView: View {
     .task(id: projectStore.projects.count) {
       await projectStore.refresh()
     }
+    .task {
+      while !Task.isCancelled {
+        try? await Task.sleep(for: .seconds(10))
+        guard !Task.isCancelled else { break }
+        await projectStore.refresh()
+      }
+    }
   }
 
   private var filteredProjects: [Project] {

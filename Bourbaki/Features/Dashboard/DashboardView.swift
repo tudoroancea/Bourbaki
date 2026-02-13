@@ -30,7 +30,7 @@ struct DashboardView: View {
                 .font(.jetBrainsMono(size: 32, weight: .bold))
                 .foregroundStyle(RosePine.text)
             }
-            Text("Select a worktree from the sidebar, or reopen a recent one")
+            Text("Keep working on hard things")
               .font(.jetBrainsMono(size: 14))
               .foregroundStyle(RosePine.subtle)
           }
