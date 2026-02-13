@@ -47,6 +47,10 @@ Changes from supacode originals:
 
 All app-level keybindings are defined in `Bourbaki/App/AppShortcuts.swift`. They are **unbound from ghostty** at init time via `--keybind=<bind>=unbind` CLI args passed to `ghostty_init` (same pattern as supacode). The ghostty unbind format uses `ctrl`/`alt`/`shift`/`super` modifiers joined by `+`.
 
+### Cmd+W / Window Close
+
+`Cmd+W` is NOT a custom SwiftUI menu shortcut. Instead, the system's built-in "Close" menu item handles it. A `MainWindowCloseInterceptor` (NSViewRepresentable + NSWindowDelegate) is installed on the main window — its `windowShouldClose` closes a tab instead of the window. For non-main windows (e.g. Settings), the system Close works naturally. `Cmd+W` is still unbound from ghostty so the terminal surface doesn't consume it.
+
 ## Settings & Tool Configuration
 
 - **Settings page** opened via `Cmd+,` (native SwiftUI `Settings` scene)

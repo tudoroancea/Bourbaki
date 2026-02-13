@@ -56,8 +56,11 @@ cd Bourbaki
 # Build GhosttyKit from source (~5 min first time)
 make build-ghostty-xcframework
 
-# Build and run the app
+# Build and run the app (Debug)
 make run-app
+
+# Build and install the app in /Applications (Release)
+make install-app
 ```
 
 ### Other targets
@@ -90,6 +93,10 @@ All app-level keybindings use `Cmd+Ctrl` or `Cmd+Shift` combos to avoid collisio
 - [x] Keybindings to switch between active worktrees
 - [x] Periodically reload the worktree list and git diff stats in the background
 - [x] Worktree management: create and delete worktrees (from existing branch, or with new branch)
+- [ ] fix reorderd projects sometimes disappearing
+- [ ] remove deleted worktrees from recent worktrees 
+- [ ] fix sidebar refresh
+- [ ] add PR status next to worktrees
 
 ## License
 

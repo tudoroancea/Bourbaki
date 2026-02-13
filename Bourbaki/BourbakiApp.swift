@@ -155,18 +155,12 @@ struct BourbakiApp: App {
         )
         .disabled(tabManager.selectedWorktreePath == nil)
 
-        Divider()
+        // Note: Cmd+W "Close" is handled by the system menu item.
+        // MainWindowCloseInterceptor installs a delegate on the main window
+        // that closes a tab instead of the window. For other windows (e.g.
+        // Settings), the system Close works normally.
 
-        Button("Close Tab") {
-          if let id = tabManager.selectedTabID {
-            tabManager.closeTab(id)
-          }
-        }
-        .keyboardShortcut(
-          AppShortcuts.closeTab.keyEquivalent,
-          modifiers: AppShortcuts.closeTab.modifiers
-        )
-        .disabled(tabManager.selectedTabID == nil)
+        Divider()
 
         Button("Close Window") {
           NSApp.terminate(nil)
@@ -261,6 +255,59 @@ enum ExternalAppLauncher {
   }
 }
 
+// MARK: - Main Window Close Interceptor
+
+/// Installs an NSWindowDelegate on the hosting window so that Cmd+W (system "Close")
+/// closes a tab instead of the window. For non-main windows (e.g. Settings) the system
+/// Close works normally — only this window's close is intercepted.
+private struct MainWindowCloseInterceptor: NSViewRepresentable {
+  let tabManager: TerminalTabManager
+
+  func makeNSView(context: Context) -> NSView {
+    let view = NSView(frame: .zero)
+    // Delay to ensure the view is installed in the window
+    DispatchQueue.main.async {
+      guard let window = view.window else { return }
+      context.coordinator.install(on: window)
+    }
+    return view
+  }
+
+  func updateNSView(_ nsView: NSView, context: Context) {}
+
+  func makeCoordinator() -> Coordinator {
+    Coordinator(tabManager: tabManager)
+  }
+
+  final class Coordinator: NSObject, NSWindowDelegate {
+    let tabManager: TerminalTabManager
+    private weak var installedWindow: NSWindow?
+
+    init(tabManager: TerminalTabManager) {
+      self.tabManager = tabManager
+    }
+
+    func install(on window: NSWindow) {
+      guard installedWindow == nil else { return }
+      installedWindow = window
+      window.delegate = self
+    }
+
+    nonisolated func windowShouldClose(_ sender: NSWindow) -> Bool {
+      MainActor.assumeIsolated {
+        if let id = tabManager.selectedTabID {
+          // Close the selected tab instead of the window.
+          tabManager.closeTab(id)
+          return
+        }
+        // No tabs open — quit the app.
+        NSApp.terminate(nil)
+      }
+      return false
+    }
+  }
+}
+
 // MARK: - Main Content
 
 private struct MainContentView: View {
@@ -279,6 +326,9 @@ private struct MainContentView: View {
     }
     .frame(minWidth: 800, minHeight: 500)
     .rosePineWindow()
+    .background {
+      MainWindowCloseInterceptor(tabManager: tabManager)
+    }
   }
 }
 
