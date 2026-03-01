@@ -13,6 +13,13 @@ GHOSTTY_XCFRAMEWORK_PATH := $(CURRENT_MAKEFILE_DIR)/Frameworks/GhosttyKit.xcfram
 GHOSTTY_RESOURCE_PATH := $(CURRENT_MAKEFILE_DIR)/Resources/ghostty
 GHOSTTY_TERMINFO_PATH := $(CURRENT_MAKEFILE_DIR)/Resources/terminfo
 GHOSTTY_BUILD_OUTPUTS := $(GHOSTTY_XCFRAMEWORK_PATH) $(GHOSTTY_RESOURCE_PATH) $(GHOSTTY_TERMINFO_PATH)
+
+# Version metadata (overrides Xcode defaults at build time)
+APP_VERSION ?= 0.1.0
+GIT_COMMIT_SHORT := $(shell git rev-parse --short=8 HEAD 2>/dev/null || echo nogit)
+GIT_COMMIT_COUNT := $(shell git rev-list --count HEAD 2>/dev/null || echo 0)
+VERSION_WITH_COMMIT := $(APP_VERSION)+$(GIT_COMMIT_SHORT)
+
 .DEFAULT_GOAL := help
 .PHONY: help build-ghostty-xcframework build-app run-app install-app check test
 
@@ -36,7 +43,8 @@ $(GHOSTTY_BUILD_OUTPUTS):
 	rsync -a --delete "$$terminfo_src/" "$$terminfo_dst/"
 
 build-app: build-ghostty-xcframework # Build the macOS app (Debug)
-	bash -o pipefail -c 'xcodebuild -project Bourbaki.xcodeproj -scheme Bourbaki -configuration Debug build -skipMacroValidation 2>&1 | mise exec -- xcsift -qw --format toon'
+	@echo "Building Bourbaki $(VERSION_WITH_COMMIT) ($(GIT_COMMIT_COUNT))"
+	bash -o pipefail -c 'xcodebuild -project Bourbaki.xcodeproj -scheme Bourbaki -configuration Debug build -skipMacroValidation MARKETING_VERSION="$(VERSION_WITH_COMMIT)" CURRENT_PROJECT_VERSION="$(GIT_COMMIT_COUNT)" 2>&1 | mise exec -- xcsift -qw --format toon'
 
 run-app: build-app # Build then launch (Debug) with log streaming
 	@settings="$$(xcodebuild -project Bourbaki.xcodeproj -scheme Bourbaki -configuration Debug -showBuildSettings -json 2>/dev/null)"; \
@@ -46,10 +54,14 @@ run-app: build-app # Build then launch (Debug) with log streaming
 	"$$build_dir/$$product/Contents/MacOS/$$exec_name"
 
 install-app: build-ghostty-xcframework # Release build and install to /Applications
-	bash -o pipefail -c 'xcodebuild -project Bourbaki.xcodeproj -scheme Bourbaki -configuration Release build -skipMacroValidation 2>&1 | mise exec -- xcsift -qw --format toon'
-	@settings="$$(xcodebuild -project Bourbaki.xcodeproj -scheme Bourbaki -configuration Release -showBuildSettings -json 2>/dev/null)"; \
+	@echo "Building Bourbaki $(VERSION_WITH_COMMIT) ($(GIT_COMMIT_COUNT))"
+	bash -o pipefail -c 'xcodebuild -project Bourbaki.xcodeproj -scheme Bourbaki -configuration Release build -skipMacroValidation MARKETING_VERSION="$(VERSION_WITH_COMMIT)" CURRENT_PROJECT_VERSION="$(GIT_COMMIT_COUNT)" 2>&1 | mise exec -- xcsift -qw --format toon'
+	@settings="$$(xcodebuild -project Bourbaki.xcodeproj -scheme Bourbaki -configuration Release -showBuildSettings -json MARKETING_VERSION="$(VERSION_WITH_COMMIT)" CURRENT_PROJECT_VERSION="$(GIT_COMMIT_COUNT)" 2>/dev/null)"; \
 	build_dir="$$(echo "$$settings" | jq -r '.[0].buildSettings.BUILT_PRODUCTS_DIR')"; \
 	product="$$(echo "$$settings" | jq -r '.[0].buildSettings.FULL_PRODUCT_NAME')"; \
+	plist="$$build_dir/$$product/Contents/Info.plist"; \
+	short_version="$$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$$plist")"; \
+	build_version="$$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$$plist")"; \
 	echo "Installing $$product to /Applications..."; \
 	rm -rf "/Applications/$$product"; \
 	cp -R "$$build_dir/$$product" /Applications/; \

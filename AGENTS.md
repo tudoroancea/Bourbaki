@@ -16,6 +16,15 @@
 - **`-Xcc -Wno-incomplete-umbrella`** suppresses GhosttyKit umbrella header warnings
 - **Deployment target: macOS 26.0** (running on macOS Tahoe; SwiftUICore linker issue with older targets)
 
+## Build Versioning
+
+- `Makefile` now overrides Xcode version fields at build time:
+  - `MARKETING_VERSION = 0.1.0+<git short sha>` (e.g. `0.1.0+a27c3a52`)
+  - `CURRENT_PROJECT_VERSION = <git commit count>`
+- Override inputs are `APP_VERSION` (default `0.1.0`), `GIT_COMMIT_SHORT`, `GIT_COMMIT_COUNT`
+- `build-app` and `install-app` both apply these overrides and print the resolved version before building
+- `install-app` also prints the built app's `CFBundleShortVersionString`/`CFBundleVersion`
+
 ## Code Signing
 
 - App is signed with Apple Development certificate (team BQYU8UZ8T7)
