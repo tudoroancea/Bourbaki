@@ -104,6 +104,70 @@ Key bindings use `Cmd+Ctrl` and `Cmd+Shift` combos to avoid collisions with both
 - Sidebar uses `.scrollContentBackground(.hidden)` + `RosePine.surface` to override system sidebar color
 - `RosePine.nsBase` / `RosePine.nsSurface` are `NSColor` variants for window chrome
 
+## Ghostty Search (Cmd+F) — Implementation Notes
+
+**libghostty provides the core search engine** (background threaded, searches active viewport + scrollback). The Swift side only needs a UI overlay and state wiring.
+
+**C API actions:**
+- `GHOSTTY_ACTION_START_SEARCH` — initiates search, carries optional initial needle (`ghostty_action_start_search_s.needle`)
+- `GHOSTTY_ACTION_END_SEARCH` — ends search, clears state
+- `GHOSTTY_ACTION_SEARCH_TOTAL` — callback reporting total matches (`ghostty_action_search_total_s.total`)
+- `GHOSTTY_ACTION_SEARCH_SELECTED` — callback reporting current match index (`ghostty_action_search_selected_s.selected`)
+
+**Binding actions (strings passed to `ghostty_surface_binding_action`):**
+- `search:<needle>` — search for text
+- `search_selection` — search current selection
+- `navigate_search:next` / `navigate_search:previous` — move between matches
+- `start_search` — open search UI without a term
+- `end_search` — close search
+
+**Already wired in Bourbaki:**
+- `GhosttySurfaceState` has `searchNeedle`, `searchTotal`, `searchSelected`, `searchFocusCount`
+- `GhosttySurfaceBridge` handles `START_SEARCH`, `SEARCH_TOTAL`, `SEARCH_SELECTED` callbacks
+
+**Still needed:**
+- Search overlay SwiftUI view (text field + "N/M" match counter + prev/next/close buttons)
+- Keybinding (`Cmd+F` to start, `Cmd+G` / `Shift+Cmd+G` to navigate, `Escape` to close)
+- Reference: supacode's `GhosttySurfaceSearchOverlay.swift`
+
+**Zig internals (for reference):**
+- Search algo: `ThirdParty/ghostty/src/terminal/search/` (sliding_window.zig, pagelist.zig, active.zig)
+- Surface handling: `ThirdParty/ghostty/src/Surface.zig` lines 5228–5326
+- Binding definitions: `ThirdParty/ghostty/src/input/Binding.zig` lines 386–408
+
+## Ghostty Splits — Implementation Notes
+
+**libghostty provides split lifecycle management** but the visual tree layout is the app's responsibility.
+
+**C API functions:**
+- `ghostty_surface_split(surface, direction)` — create new split (direction: `RIGHT`, `DOWN`, `LEFT`, `UP`)
+- `ghostty_surface_split_focus(surface, target)` — move focus (`PREVIOUS`, `NEXT`, `UP`, `DOWN`, `LEFT`, `RIGHT`)
+- `ghostty_surface_split_resize(surface, direction, amount)` — resize split
+- `ghostty_surface_split_equalize(surface)` — equalize all splits
+
+**C API actions:**
+- `GHOSTTY_ACTION_NEW_SPLIT`, `GOTO_SPLIT`, `RESIZE_SPLIT`, `EQUALIZE_SPLITS`, `TOGGLE_SPLIT_ZOOM`
+
+**Surface context:** new split surfaces use `GHOSTTY_SURFACE_CONTEXT_SPLIT` (not `TAB` or `WINDOW`)
+
+**Config inheritance:** `ghostty_surface_inherited_config()` provides working dir, font size, etc. for new split surfaces
+
+**Already in Bourbaki:**
+- `GhosttySplitAction.swift` — Swift enum for split actions
+- `GhosttySurfaceBridge.swift` handles split action dispatch (lines 81–107)
+- Split menu items were stripped from context menu during supacode port
+
+**Reference implementations (in-tree):**
+- `ThirdParty/ghostty/macos/Sources/Features/Splits/SplitTree.swift` — immutable split tree data structure
+- `ThirdParty/ghostty/macos/Sources/Features/Splits/SplitView.swift` — SwiftUI divider + resize gestures
+- `ThirdParty/ghostty/macos/Sources/Features/Splits/TerminalSplitTreeView.swift` — recursive tree rendering
+
+**Still needed:**
+- Port or adapt `SplitTree` / `SplitView` / `TerminalSplitTreeView` into Bourbaki
+- Split action handling in terminal state (`WorktreeTerminalState.performSplitAction`)
+- Re-add split items to context menu
+- Keybindings for split create/navigate/resize
+
 ## Adding Files to Xcode Project
 
 The `.xcodeproj/project.pbxproj` must be manually edited to add new Swift files:
